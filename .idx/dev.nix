@@ -16,6 +16,7 @@
       # "vscodevim.vim"
       "esbenp.prettier-vscode"
       "cweijan.vscode-mysql-client2"
+      
     ];
     workspace = {
       onCreate = {
