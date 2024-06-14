@@ -16,7 +16,6 @@
       # "vscodevim.vim"
       "esbenp.prettier-vscode"
       "cweijan.vscode-mysql-client2"
-      
     ];
     workspace = {
       onCreate = {
@@ -27,11 +26,11 @@
     # Enable previews and customize configuration
     previews = {
       enable = true;
-      previews = {
+      previews = {/*
         web = {
           command = ["npm" "run" "dev" "--" "--port" "$PORT"];
           manager = "web";
-        };
+        };*/
       };
     };
   };

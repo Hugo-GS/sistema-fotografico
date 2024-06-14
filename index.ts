@@ -1,8 +1,8 @@
 import * as express from "express";
 import configuracionesExpress from "./configuracionesExpress";
-//import rutasAdministrador from "./capa_presentacion/rutas/rutasAdministrador";
-//import rustasEncargado from "./capa_presentacion/rutas/rutasEncargado";
-
+import rutasApiAdministrador from "./capa_presentacion/rutasAPI/rutasApiAdministrador";
+import rutasApiEncargado from "./capa_presentacion/rutasAPI/rutasApiEncargado";
+import rutasWebAdministrador from "./capa_presentacion/rutasWeb/rutasWebAdministrador";
 
 const app = express();
 configuracionesExpress(app);
@@ -12,14 +12,9 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
-//app.use('/admin', rutasAdministrador)
-//app.use('/encargado', rustasEncargado)
-
-/*
-app.get('/api', (req, res) => {
-  res.json({"msg": ""});
-});*/
-
+app.use('/admin', rutasApiAdministrador)
+app.use('/encargado', rutasApiEncargado)
+app.use('/sistemaAdmin', rutasWebAdministrador)
 
 app.listen(port, () => {
   console.log(`Listening on http://localhost:${port}`);

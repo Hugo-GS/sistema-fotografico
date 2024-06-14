@@ -50,8 +50,8 @@ export class PersonaDBContext {
     try {
       const connection: mysql.Connection = await mysql.createConnection(this.config);
       const querySql: string = `
-      SELECT id_persona, nombre, apellido_paterno, apellido_materno 
-      FROM persona WHERE id_persona = ?`;
+      SELECT id, nombre, apellido_paterno, apellido_materno 
+      FROM persona WHERE id = ?`;
       const [filas]: any[] = await connection.execute(querySql, [idPersona]);
       
       await connection.end();
@@ -59,7 +59,7 @@ export class PersonaDBContext {
       if (filas.length > 0) {
         const [fila] = filas;
         return new Persona(
-          fila.id_persona,
+          fila.id,
           fila.nombre,
           fila.apellido_paterno,
           fila.apellido_materno
