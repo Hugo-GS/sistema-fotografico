@@ -128,3 +128,31 @@ export default router;
     ```
   - views
     index.ejs
+
+
+-----------------------------
+
+
+Hola tengo un proyecto realizado en expressjs con typescript y EJS, este proyecto lo estoy usando con arquitectura 3 capas la cual tiene la siguiente estructura de carpetas y archivos:
+- capa_acceso_datos
+    - configuracion_global.ts
+    - Persona.ts
+- capa_logica_negocio
+    - GestorPersona.ts
+- capa_presentacion
+    - public
+        - scripts
+            - manejadorRutas.ts
+        - css
+    - rutasAPI
+        - rutasApiAdministrador.ts
+        - rutasApiEncargado.ts
+    - rutasWeb
+        - rutasWebAdministrador.ts
+    - views
+        - index.ejs
+- index.ts
+- tsconfig.json
+- package.json
+
+  

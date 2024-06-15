@@ -1,0 +1,9 @@
+Compilar los .ts del front con webpack para obtener un bundle.js
+```npm run build``` El buil del webpack esta definido en el archivo webpack.config.js
+
+Ejecutar el servidor node express
+```npm run dev```
+
+
+Exportar base de datos
+```mysqldump -u root -p sisventafoto > /home/user/sistema-fotografico/exportada.sql```

@@ -6,7 +6,7 @@ import rutasWebAdministrador from "./capa_presentacion/rutasWeb/rutasWebAdminist
 
 const app = express();
 configuracionesExpress(app);
-const port = parseInt(process.env.PORT) || process.argv[3] || 8080;
+const port = parseInt(process.env.PORT) || process.argv[3] || 5050;
 
 app.get('/', (req, res) => {
   res.render('index');
