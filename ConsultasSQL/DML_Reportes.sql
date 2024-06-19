@@ -1,4 +1,4 @@
--- Active: 1718458203512@@127.0.0.1@3306@sisventafoto
+
 -- Reportes Caso
 
 -- Hugo============================
@@ -108,12 +108,6 @@ GROUP BY
     DATE(v.fecha_hr), cs.concepto
 ORDER BY 
     fecha_venta, tipo_servicio;
-
-
-
-
-
-
 
 
 ---

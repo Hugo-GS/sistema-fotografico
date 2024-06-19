@@ -1,15 +1,16 @@
+-- Active: 1718478180683@@127.0.0.1@3306@sisventafoto
 
---- Reporte 1: 
 
+-- Reporte 2: •	Consolidado de descuentos a clientes antiguos por mes.
 SELECT 
     DATE_FORMAT(v.fecha_hr, '%Y-%m') AS mes_venta,
     cb.concepto AS tipo_servicio,
     COUNT(cb.id) AS cantidad_descuentos_usados,
-    SUM(
+    TRUNCATE(SUM(
         CASE 
             WHEN cb.tipo = 'P' THEN (cs.valor * sa.cantidad * (cb.valor / 100))
             ELSE cb.valor * sa.cantidad
-        END) AS monto_descontado
+        END),2) AS monto_descontado
 FROM 
     venta v
 JOIN 
@@ -28,8 +29,8 @@ ORDER BY
     mes_venta;
 
 
--- Reporte 2: 
 
+--- Reporte 1: •Consolidado de las ventas diarias por tipo de servicio fotográfico
  SELECT 
     DATE(v.fecha_hr) AS fecha_venta,
     cs.concepto AS tipo_servicio,
@@ -58,9 +59,11 @@ SELECT
   f.imagen_bin
 FROM fotos f
 JOIN cliente c ON f.id_cliente = c.id
+JOIN persona p ON c.id = p.id
 WHERE c.id = 1;
 
-SELECT v.id, v.estado, v.fecha_hr, v.total_general,
+-- Lista de ventas a clientes con Encargado
+SELECT v.id as id_venta, v.estado, v.fecha_hr, v.total_general,
        CONCAT(p_cliente.nombre, ' ', p_cliente.apellido_paterno, ' ', p_cliente.apellido_materno) AS cliente,
        CONCAT(p_encargado.nombre, ' ', p_encargado.apellido_paterno, ' ', p_encargado.apellido_materno) AS encargado
 FROM venta v
@@ -70,3 +73,14 @@ JOIN persona p_cliente ON c.id = p_cliente.id
 JOIN persona p_encargado ON e.id = p_encargado.id;
 
 
+
+
+--la cantidad de ventas por encargado
+SELECT s.nombre AS sucursal, p_e.nombre AS encargado_nombre, COUNT(v.id) AS total_ventas
+FROM sucursal s
+JOIN encargadosucursal es ON s.id = es.id_sucursal
+JOIN encargado e ON es.id_encargado = e.id
+JOIN persona p_e ON e.id = p_e.id
+JOIN venta v ON e.id = v.id_encargado
+GROUP BY s.nombre, p_e.nombre
+HAVING total_ventas > 5;

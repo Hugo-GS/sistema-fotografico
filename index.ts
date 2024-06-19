@@ -1,4 +1,5 @@
 import * as express from "express";
+import { Request, Response } from "express";
 import configuracionesExpress from "./configuracionesExpress";
 import rutasApiAdministrador from "./capa_presentacion/rutasAPI/rutasApiAdministrador";
 import rutasApiEncargado from "./capa_presentacion/rutasAPI/rutasApiEncargado";
@@ -8,7 +9,7 @@ const app = express();
 configuracionesExpress(app);
 const port = parseInt(process.env.PORT) || process.argv[3] || 5050;
 
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   res.render('index');
 });
 
