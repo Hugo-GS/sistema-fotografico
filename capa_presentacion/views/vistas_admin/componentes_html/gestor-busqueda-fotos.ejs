@@ -1,0 +1,84 @@
+<div class="container_buscar_fotos">
+    <h1>Gestor de fotos</h1>
+    <div class="filters">
+      <div class="dropdown">
+        <div class="dropdown-toggle">
+
+          <div class="input-container">
+            <input type="text"  class="input"  id="" placeholder="" >
+            <label class="input-label">Descripción</label>
+          </div>
+        </div>
+      </div>
+      <div class="dropdown">
+        <select id="cliente" disabled>
+          <option value="">Cliente</option>
+          <!-- Más opciones aquí -->
+        </select>
+        <div class="dropdown-content">
+          <div class="input-container">
+            <input type="search"  class="input"  id="searchCliente" placeholder="">
+            <label class="input-label">Buscar cliente CI</label>
+          </div>
+          
+          <button id="btnBuscarCliente">Buscar</button>
+          <ul id="clienteList">
+            <!-- Lista de resultados de búsqueda -->
+
+          </ul>
+        </div>
+      </div>
+      <div class="dropdown">
+        <input type="date">
+      </div>
+      <div id="viewSwitch">
+        <svg id="listView" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list">
+          <line x1="8" y1="6" x2="21" y2="6"></line>
+          <line x1="8" y1="12" x2="21" y2="12"></line>
+          <line x1="8" y1="18" x2="21" y2="18"></line>
+          <line x1="3" y1="6" x2="3.01" y2="6"></line>
+          <line x1="3" y1="12" x2="3.01" y2="12"></line>
+          <line x1="3" y1="18" x2="3.01" y2="18"></line>
+        </svg>
+        <!--<svg id="gridView" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-grid">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>-->
+      </div>
+    </div>
+    <div class="table-container">
+      <table id="photoTable">
+        <thead>
+          <tr>
+            <th>ID-Foto</th>
+            <th>Descripción</th>
+            <th>Cliente</th>
+            <th>Fecha</th>
+            <th>Miniatura</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+           <!--
+          <tr>
+            <td>1</td>
+            <td>Dia de campo familiar</td>
+            <td>Juan Perez Goitia</td>
+            <td>2020-02-25</td>
+            <td></td>
+            <td>
+              <label for="">
+                <input type="checkbox" name="" id=""> Seleccionar
+              </label>
+            </td>
+          </tr>
+          -->
+        </tbody>
+      </table>
+      <div id="photoGrid" class="hidden">
+        <!-- Aquí se mostrará la vista en mosaico -->
+      </div>
+    </div>
+  </div>

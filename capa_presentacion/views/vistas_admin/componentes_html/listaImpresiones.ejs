@@ -1,0 +1,46 @@
+
+<div class="container_buscar_fotos">
+  <h1>Lista de Servicios fotograficos</h1>
+  <table>
+  <thead>
+      <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Descripción Detalle Producto</th>
+      <th>Estado</th>
+      <th>Valor</th>
+      <th>Acciones</th>
+      </tr>
+  </thead>
+  <tbody>
+      <% impresion.forEach(impresion => { %>
+          <tr>
+              <td><%= impresion.id %></td>
+              <td><%= impresion.nombre %></td>
+              <td><%= impresion.descripciondetalleproducto %></td>
+              <td><%= impresion.estado %></td>
+              <td><%= impresion.valor %></td>
+              <td>
+                  
+                      <a href="/sistemaAdmin/editar_impresion/<%= impresion.id %> ">Editar</a>
+                      
+                  
+              </td>
+          </tr>
+      <% }); %>
+  </tbody>
+  </table>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParam = new URLSearchParams(window.location.search);
+      const status = urlParam.get('estado');
+  
+      if (status === 'ok') {
+        alert('Datos de Impresion Actualizados Correctamente');
+      } else if (status === 'error') {
+        alert('Hubo un Error al Procesar los Datos de Impresion.');
+      }
+      // Si no hay status en la URL, no se realiza ninguna acción adicional.
+    });
+</script>

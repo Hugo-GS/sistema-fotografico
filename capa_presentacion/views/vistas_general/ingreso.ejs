@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Foto Estudio Master | Ingreso</title>
+    <style>
+      :root {
+        --color-1: #fb015e;
+        --color-2: #ff3369;
+        --color-3: #fe4c6b;
+        --color-4: #ff6471;
+        --color-5: #ff7b75;
+        --color-6: #fe9377;
+        --color-7: #fbaa7a;
+        --color-8: #ffc17f;
+        --color-9: #fed482;
+        --color-10: #fee0a5;
+
+        --color-button: var(--color-4);
+      }
+
+      * {
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+          sans-serif;
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      /*INPUT TEXT STYLE*/
+      .input-container {
+        position: relative;
+        margin-top: 15px;
+        width: 200px;
+      }
+
+      .input {
+        width: 100%;
+        border: 1px solid #a5a5a5;
+        outline: none;
+        border-radius: 5px;
+        padding: 5px;
+        background-color: #ffffff;
+        font-size: 16px;
+        color: #333333;
+      }
+
+      .input-label {
+        position: absolute;
+        top: 5px;
+        left: 15px;
+        pointer-events: none;
+        transition: 0.3s;
+        color: #a5a5a5;
+      }
+
+      .input:focus + .input-label {
+        top: -14px;
+        left: 5px;
+        font-size: 12px;
+        color: var(--color-1) !important;
+      }
+
+      .input:not(:placeholder-shown) {
+        border: 1px solid #a5a5a5;
+      }
+
+      .input:not(:placeholder-shown) + .input-label {
+        top: -14px;
+        left: 5px;
+        font-size: 12px;
+        color: #363636;
+      }
+
+      .input:focus {
+        border: 1px solid var(--color-1);
+      }
+      /*FIN INPUTTEXT STYLE*/
+      .container-login {
+        position: absolute;
+        display: flex;
+        width: 300px;
+        padding: 20px;
+        justify-content: center;
+        height: 450px;
+        align-items: center;
+        border-radius: 15px;
+        background-color: #ffffffa6;
+      }
+
+      .form-login {
+        display: flex;
+        gap: 10px;
+        flex-direction: column;
+        align-items: center;
+      }
+      .form-login button {
+        padding: 10px 20px;
+        color: white;
+        background-color: var(--color-3);
+        border-radius: 5px;
+        border: none;
+        &:hover {
+          filter: brightness(120%);
+        }
+      }
+
+      .background1 {
+        background: linear-gradient(
+            135deg,
+            #0000 18.75%,
+            #fe4c6b 0 31.25%,
+            #0000 0
+          ),
+          repeating-linear-gradient(
+            45deg,
+            #fe4c6b -6.25% 6.25%,
+            #fe9377 0 18.75%
+          );
+        background-size: 76px 76px;
+        border-radius: 10px;
+      }
+      .logo-login {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .area {
+        background: var(--color-5);
+        background: -webkit-linear-gradient(to left, #fe9377, #fe4c6b);
+        width: 100%;
+        height: 100vh;
+      }
+
+      .circles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .circles li {
+        position: absolute;
+        display: block;
+        list-style: none;
+        width: 20px;
+        height: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        animation: animate 25s linear infinite;
+        bottom: -150px;
+      }
+
+      .circles li:nth-child(1) {
+        left: 25%;
+        width: 80px;
+        height: 80px;
+        animation-delay: 0s;
+      }
+
+      .circles li:nth-child(2) {
+        left: 10%;
+        width: 20px;
+        height: 20px;
+        animation-delay: 2s;
+        animation-duration: 12s;
+      }
+
+      .circles li:nth-child(3) {
+        left: 70%;
+        width: 20px;
+        height: 20px;
+        animation-delay: 4s;
+      }
+
+      .circles li:nth-child(4) {
+        left: 40%;
+        width: 60px;
+        height: 60px;
+        animation-delay: 0s;
+        animation-duration: 18s;
+      }
+
+      .circles li:nth-child(5) {
+        left: 65%;
+        width: 20px;
+        height: 20px;
+        animation-delay: 0s;
+      }
+
+      .circles li:nth-child(6) {
+        left: 75%;
+        width: 110px;
+        height: 110px;
+        animation-delay: 3s;
+      }
+
+      .circles li:nth-child(7) {
+        left: 35%;
+        width: 150px;
+        height: 150px;
+        animation-delay: 7s;
+      }
+
+      .circles li:nth-child(8) {
+        left: 50%;
+        width: 25px;
+        height: 25px;
+        animation-delay: 15s;
+        animation-duration: 45s;
+      }
+
+      .circles li:nth-child(9) {
+        left: 20%;
+        width: 15px;
+        height: 15px;
+        animation-delay: 2s;
+        animation-duration: 35s;
+      }
+
+      .circles li:nth-child(10) {
+        left: 85%;
+        width: 150px;
+        height: 150px;
+        animation-delay: 0s;
+        animation-duration: 11s;
+      }
+
+      @keyframes animate {
+        0% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 1;
+          border-radius: 0;
+        }
+
+        100% {
+          transform: translateY(-1000px) rotate(720deg);
+          opacity: 0;
+          border-radius: 50%;
+        }
+      }
+      #message{
+        color: red;
+        padding: 5px;
+        
+      }
+
+      .message-warning{
+        border: 1px solid red;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="area">
+      <ul class="circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    </div>
+
+    <div class="container-login">
+      <div class="background1"></div>
+
+      <form  id="form-login" class="form-login">
+        <div class="logo-login">
+          <img src="images/logo.png" alt="" srcset="" width="100px" />
+          <span>FOTO ESTUDIO MASTER</span>
+        </div>
+          
+          <span id="message"></span>
+
+        <span class="title-form-login">Ingreso al sistema</span>
+        <div>
+          <div class="input-container">
+            <input
+              type="text"
+              class="input"
+              id="nombreUsuario"
+              placeholder=""
+            />
+            <label class="input-label">Nombre de usuario</label>
+          </div>
+          <div class="input-container">
+            <input
+              type="`password"
+              class="input"
+              id="contraUsuario"
+              placeholder=""
+            />
+            <label class="input-label">Contraseña</label>
+          </div>
+        </div>
+        <button id="btnIngreso">Ingreso</button>
+      </form>
+    </div>
+    <script>
+      const formLogin = document.getElementById("form-login");
+      formLogin.addEventListener("submit", (e) => {
+        e.preventDefault();
+      })
+
+      btnIngreso.addEventListener("click", () => {
+        
+        const nombreUsuario = document.getElementById("nombreUsuario").value;
+        const contraUsuario = document.getElementById("contraUsuario").value;
+        const data = {
+          nombreUsuario,
+          contraUsuario,
+        };
+
+          fetch("/ingreso", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              let txtMensaje = document.getElementById('message');
+              txtMensaje.innerText = data.mensaje;
+              txtMensaje.classList.add("message-warning")
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        });
+    </script>
+  </body>
+</html>

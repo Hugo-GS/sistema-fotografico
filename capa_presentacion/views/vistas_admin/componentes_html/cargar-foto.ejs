@@ -1,0 +1,58 @@
+<div class="bx-complete flex gap_10px">
+    <div class="bx-buscar-form">
+      <div id="upload-container">
+          <h2>Cargar Fotos</h2>
+          <div id="upload-text">Arrastra y suelta tus fotos aquí o <label for="file-input" class="btn_foto">Selecciona archivos</label></div>
+          <input type="file" id="file-input" multiple accept="image/*">
+          <ul id="file-list"></ul>
+      </div>
+      <div>
+        <div class="input-container">
+            <input type="text" class="input" id="descripcionFoto" placeholder="" >
+            <label class="input-label">Descripcion de las fotos</label>
+          </div>
+        <button id="btnGuardarFotos">
+            Guardar fotos en sistema
+        </button>
+      
+    </div>
+    </div>
+    <div class="bx-buscar-form">
+      <form action="">
+        
+          <div class="input-container">
+            <input type="search" class="input" id="ci_cliente" placeholder="" >
+            <label class="input-label">Buscar por ci</label>
+          </div>
+          <button id="btnBuscarcliente" type="button">
+            Buscar
+          </button>
+      </form>
+  
+      <div>
+        <table class="table-cliente-data">
+          <tr>
+            <td class="title-table" colspan="2">
+              <h2>Cliente</h2></td>
+          </tr>
+          <tr>
+            <th>Nombre:</th>
+            <td id="nombreCliente">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </td>
+          </tr>
+          <tr>
+            <th>Apellidos:</th>
+            <td id="apellidosCliente">
+            </td>
+          </tr>
+          <tr>
+            <th></th>
+            <td id="accionCliente">
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+</div>
+  

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Administrador</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+    <script type="module" src="/js/manejadorRutasAdmin.js"></script>
+  </head>
+  <body>
+
+    <div class="sidebar background">
+      <div class="logo-bx">
+        <img
+          src="/images/logo.png"
+          alt=""
+          srcset=""
+        />
+        &nbsp;&nbsp;Foto Estudio Master
+      </div>
+
+      <a class="item_nav" href="#/PanelPrincipal">
+        <i class="bx bx-home"></i>&nbsp;&nbsp; 
+        Panel principal
+      </a>
+
+      <a class="item_nav" href="#/GestorServicios">
+        <i class="bx bx-image-alt"></i>&nbsp;&nbsp; 
+        Gestor de Servicios
+      </a>
+
+      <a class="item_nav" href="#/GestorClientes">
+        <i class="bx bx-image-alt"></i>&nbsp;&nbsp; 
+        Gestor de Clientes
+      </a>
+
+      <a class="item_nav" href="#/GestorFotos">
+        <i class="bx bx-image-alt"></i>&nbsp;&nbsp; 
+        Gestor de Fotos
+      </a>
+
+
+      <a class="item_nav last_item" href="/cerrar_sesion">
+        <i class="bx bx-exit"></i>&nbsp;&nbsp; Salir del sistema
+      </a>
+    </div>
+
+    <div id="sub_sidebar_gestor_fotos" class="sub_sidebar no-active">
+
+      <a class="card-acceso_rapido" href="#/GestorFotos/cargar_fotos">
+        <div class="box-i">
+          <i class='bx bx-bar-chart-square'></i>
+        </div>
+        <span>Cargar fotos</span>
+      </a>
+
+      <a class="card-acceso_rapido" href="#/GestorFotos/buscador_fotos">
+        <div class="box-i">
+          <i class='bx bx-bar-chart-square'></i>
+        </div>
+        <span>Gestor de archivos fotograficos</span>
+      </a>
+
+    </div>
+    
+    <div id="sub_sidebar_gestor_servicio" class="sub_sidebar no-active">
+
+      <a class="card-acceso_rapido" href="#/GestorServicios/registrar_servicio_fotografico">
+        <div class="box-i">
+          <i class='bx bx-bar-chart-square'></i>
+        </div>
+        <span>Registrar Servicio Fotográfico</span>
+      </a>
+
+      <a class="card-acceso_rapido" href="#/GestorServicios/registrar_servicio">
+        <div class="box-i">
+          <i class='bx bx-bar-chart-square'></i>
+        </div>
+        <span>Registrar Servicios adicionales</span>
+      </a>
+
+      <a class="card-acceso_rapido" href="#/GestorServicios/verImpresiones">
+        <div class="box-i">
+          <i class='bx bx-bar-chart-square'></i>
+        </div>
+        <span>Ver servicios</span>
+      </a>
+
+    </div>
+
+    <div id="sub_sidebar_gestor_clientes" class="sub_sidebar no-active">
+      <a class="card-acceso_rapido" href="#/GestorClientes/verClientes">
+        <div class="box-i">
+          <i class='bx bx-bar-chart-square'></i>
+        </div>
+        <span>Ver Clientes</span>
+      </a>
+
+      <a class="card-acceso_rapido" href="#/GestorClientes/registrar_cliente">
+        <div class="box-i">
+          <i class='bx bx-bar-chart-square'></i>
+        </div>
+        <span>Registrar Cliente</span>
+      </a>
+    </div>

@@ -1,0 +1,38 @@
+<%- include('header') %>
+
+    <div id="contenedorPrincipal" class="contenedor_principal">
+<h1>Editar Impresión</h1>
+<form action="/sistemaAdmin/editar_impresion/<%= datosEditar.id %>" method="post">
+    <fieldset>
+    <input type="hidden" maxlength="255" name="id" value="<%= datosEditar.id %>" required />
+    <legend>Actualizar Datos de la Impresión</legend>
+    <div>
+        <label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" value="<%= datosEditar.nombre %>" required>
+    </div>
+    <div>
+        <label for="descripcionDetalleProducto">Descripción:</label>
+        <input type="text" name="descripcionDetalleProducto" value="<%= datosEditar.descripciondetalleproducto %>" required>
+    </div>
+    <div>
+        <label for="estado">Estado:</label>
+        <select name="estado" required>
+        <option value="<%= datosEditar.estado %>" selected><%= datosEditar.estado %></option>
+        <option value="A" <%= datosEditar.estado === 'A' ? 'selected' : '' %>>A</option>
+        <option value="I" <%= datosEditar.estado === 'I' ? 'selected' : '' %>>I</option>
+        </select> 
+    </div>
+<div>
+    <label for="valor">Valor:</label>
+    <input type="number" name="valor" value="<%= datosEditar.valor %>" min="1" required>
+</div>
+<div>
+    <input type="submit" value="Actualizar">
+</div>
+</fieldset>
+</form>
+</div>
+
+<script src="/js/accionesGestorFotos.js"></script>
+</body>
+</html>

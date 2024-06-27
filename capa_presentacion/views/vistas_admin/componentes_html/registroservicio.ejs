@@ -1,0 +1,55 @@
+<style>
+  legend{
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .formulario_sistema{
+    width: 300px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    padding: 10px;
+  }
+  .formulario_sistema_fieldset {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+  }
+  .formulario_sistema_fieldset div{
+    margin-bottom: 10px;
+  }
+  label{
+    display: inline-block;
+    width: 100px;
+  }
+  input[type="submit"]{
+    margin-top: 15px;
+    border-radius: 5px;
+    background-color: #FF6471;
+    border: none;
+    padding: 5px;
+    color: white;
+  }
+</style>
+<form action="/sistemaAdmin/registrar_servicio" method="post" class="formulario_sistema">
+    <fieldset class="formulario_sistema_fieldset">
+      <legend>Registrar Servicio Fotográfico</legend>
+      <div>
+        <label for="concepto">
+          Concepto: 
+          <abbr title="required" aria-label="required">*</abbr>
+        </label>
+        <input type="text" maxlength="255" name="concepto" required />
+      </div>
+      <div>
+        <label for="valor">
+          Valor: 
+          <abbr title="required" aria-label="required">*</abbr>
+        </label>
+        <input type="number" step="0.01" min="1" name="valor" required />
+      </div>
+      <div>
+        <input type="submit" value="Registrar Servicio">
+      </div>
+    </fieldset>
+  </form>

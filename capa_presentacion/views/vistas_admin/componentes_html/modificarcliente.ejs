@@ -1,0 +1,38 @@
+<%- include('header') %>
+    <div id="contenedorPrincipal" class="contenedor_principal">
+        <form action="/sistemaAdmin/editar_cliente/<%= datosEditar.id %>"  method="post" class="formulario_sistema">
+            <fieldset>
+              <input type="hidden" maxlength="255" name="id" value="<%= datosEditar.id %>" required />
+              <legend>Modificar Cliente</legend>
+              <div>
+                <label for="nombre">
+                  Nombre: 
+                  <abbr title="required" aria-label="required">*</abbr>
+                </label>
+                <input type="text" maxlength="255" name="nombre" value="<%= datosEditar.nombre %>" required />
+              </div>
+              <div>
+                <label for="apellido_paterno">
+                  Apellido Paterno: 
+                  <abbr title="required" aria-label="required">*</abbr>
+                </label>
+                <input type="text" maxlength="255" name="apellido_paterno" value="<%= datosEditar.apellido_paterno %>"required />
+              </div>
+              <div>
+                <label for="apellido_materno">
+                  Apellido Materno:
+                  <abbr title="required" aria-label="required">*</abbr>
+                </label>
+                <input type="text" maxlength="255" name="apellido_materno" value="<%= datosEditar.apellido_materno %>"required />
+              </div>
+              <div>
+                <input type="submit" value="Actualizar datos de Cliente">
+              </div>
+            </fieldset>
+          </form>
+    </div>
+    
+
+    <script src="/js/accionesGestorFotos.js"></script>
+  </body>
+</html>

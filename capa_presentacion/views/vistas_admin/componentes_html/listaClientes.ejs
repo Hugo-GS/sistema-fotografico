@@ -1,0 +1,40 @@
+
+<div class="container_buscar_fotos">
+<h1>Lista de Clientes</h1>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido Paterno</th>
+            <th>Apellido Materno</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% cliente.forEach(cliente => { %>
+            <tr>
+                <td><%= cliente.id %></td>
+                <td><%= cliente.nombre %></td>
+                <td><%= cliente.apellido_paterno %></td>
+                <td><%= cliente.apellido_materno %></td>
+                <td>
+                    <a href="/sistemaAdmin/editar_cliente/<%= cliente.id %> ">Editar</a>
+            </td>
+            </tr>
+        <% }); %>
+    </tbody>
+</table>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const urlParam = new URLSearchParams(window.location.search);
+    const status = urlParam.get('estado');
+
+    if (status === 'ok') {
+        alert('Datos de Cliente Actualizados Correctamente');
+    } else if (status === 'error') {
+        alert('Hubo un Error al Procesar los Datos de Cliente.');
+    }
+    // Si no hay status en la URL, no se realiza ninguna acción adicional.
+    });
+</script>

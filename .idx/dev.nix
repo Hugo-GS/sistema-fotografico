@@ -16,10 +16,12 @@
       # "vscodevim.vim"
       "esbenp.prettier-vscode"
       "cweijan.vscode-mysql-client2"
+      "jdinhlife.gruvbox"
     ];
     workspace = {
       onCreate = {
         npm-install = "npm install";
+        
       };
       # To run something each time the workspace is (re)started, use the `onStart` hook
     };
