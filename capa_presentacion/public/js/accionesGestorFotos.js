@@ -163,22 +163,7 @@ function initComponenteCargarFoto() {
     }
   });
 
-  async function buscarCliente(ciCliente) {
-    const response = await fetch('/api_admin/buscar_cliente', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ ci: ciCliente })
-    });
 
-    if (!response.ok) {
-      throw new Error('Error en la respuesta del servidor');
-    }
-
-    const data = await response.json();
-    return data;
-  }
 
   function mostrarDatosCliente(clienteData) {
     nombreCliente.textContent = clienteData.nombre;
@@ -191,6 +176,23 @@ function initComponenteCargarFoto() {
 
 }
 
+async function buscarCliente(ciCliente) {
+  const response = await fetch('/api_admin/buscar_cliente', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ ci: ciCliente })
+  });
+
+  if (!response.ok) {
+    throw new Error('Error en la respuesta del servidor');
+  }
+
+  const data = await response.json();
+  return data;
+}
+
 function initComponenteBuscadorFotos() {
   const btnBuscarCliente = document.getElementById("btnBuscarCliente");
   const searchCliente = document.getElementById("searchCliente");
@@ -200,36 +202,49 @@ function initComponenteBuscadorFotos() {
   const gridView = document.getElementById("gridView");
   const photoTable = document.getElementById("photoTable");
   const photoGrid = document.getElementById("photoGrid");
+  const $clienteSelect = document.getElementById("cliente");
+  let ciClienteSeleccionado = null;
 
-btnBuscarCliente.addEventListener("click", () => {
-  const query = searchCliente.value;
-  fetch('/buscar_cliente', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ query })
-  })
-  .then(response => response.json())
-  .then(data => {
-    clienteList.innerHTML = '';
-    data.forEach(cliente => {
-      const li = document.createElement('li');
-      li.textContent = cliente.nombre;
-      clienteList.appendChild(li);
-    });
-  })
-  .catch(error => console.error('Error:', error));
-});
+  btnBuscarCliente.addEventListener("click", async () => {
+    const query = searchCliente.value;
+    const clienteData = await buscarCliente(query);
+    mostrarDatosCliente(clienteData);
+  });
 
+  function mostrarDatosCliente(clienteData) {
+
+    clienteList.innerHTML = `
+      <li style="padding:3px; border-radius:5px; background-color: #ececec; margin-top:5px;">${clienteData.nombre} ${clienteData.apellidoPaterno} ${clienteData.apellidoMaterno} 
+      <button 
+        style="margin:0; margin-left:5px; background-color: #fefefe; color:black; font-size:16px; padding:4px 0 0 4px;" 
+        id="btnSeleccionarCliente">
+        <i class='bx bx-user-check'></i>
+      </button>
+      </li>`;
+    
+      document.getElementById('btnSeleccionarCliente').addEventListener("click", ()=>{
+        seleccionarClienteBusquedaFoto(`${clienteData.nombre} ${clienteData.apellidoPaterno} ${clienteData.apellidoMaterno}`);
+      })
+    
+  }
+
+  function seleccionarClienteBusquedaFoto(nombreCompleto) {
+      ciClienteSeleccionado = searchCliente;
+      const $option = $clienteSelect.querySelector("option");
+      $option.textContent = nombreCompleto;
+  }
 
 listView.addEventListener("click", () => {
   photoTable.classList.remove("hidden");
   photoGrid.classList.add("hidden");
 });
-
+/*
 gridView.addEventListener("click", () => {
   photoTable.classList.add("hidden");
   photoGrid.classList.remove("hidden");
-});
+});*/
+
+//--------------------------------------------------
+
+
 }

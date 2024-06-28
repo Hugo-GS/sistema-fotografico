@@ -13,7 +13,10 @@ export class GestorFotos {
     await this.fotosDBContext.insertFoto(foto);
   }
   
-  //async obtenerFoto(id: number): Promise<Foto | null> {
-  //}
+  async obtenerFotosCliente(ciCliente: number): Promise<Foto[]> {
+    const fotosCliente: Foto[] = await 
+      this.fotosDBContext.seleccionarFotosPorCiCliente(ciCliente);
+    return fotosCliente;
+  }
   
 }

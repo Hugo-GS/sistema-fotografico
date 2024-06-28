@@ -6,7 +6,6 @@ import rutasApiEncargado from "./capa_presentacion/rutasAPI/rutasApiEncargado";
 import rutasWebAdministrador from "./capa_presentacion/rutasWeb/rutasWebAdministrador";
 import rutasWebEncargado from "./capa_presentacion/rutasWeb/rutasWebEncargado";
 
-
 const app = express();
 configuracionesExpress(app);
 
@@ -25,7 +24,6 @@ app.get('/ingreso', (req: Request, res: Response) => {
 app.post('/ingreso', (req: Request, res: Response) => {
   const nombreUsuario = req.body.nombreUsuario;
   const contrasena = req.body.contraUsuario;
-  
 
   res.json({mensaje: `${nombreUsuario} ${contrasena}`})
 });

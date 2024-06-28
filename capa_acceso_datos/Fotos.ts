@@ -17,7 +17,6 @@ export class Foto {
       estado: string,
       id_cliente: number
     ) {
-      
       this.id = id;
       this.imagen_bin = imagen_bin;
       this.descripcion = descripcion;
@@ -34,7 +33,7 @@ export class FotosDBContext {
       this.config = configuracion;
     }
 
-    async insertFoto(foto: Foto){
+    async insertFoto(foto: Foto) {
         try {
             const connection: mysql.Connection = await mysql.createConnection(
               this.config
@@ -54,6 +53,43 @@ export class FotosDBContext {
           } catch (error) {
             console.error("Error al insertar registro en Fotos: ", error);
           }
+    }
+
+    async seleccionarFotosPorCiCliente(ciCliente: number): Promise<Foto[]> {
+      try {
+        const connection: mysql.Connection = await mysql.createConnection(
+          this.config);
+        const querySql: string = `
+        SELECT  
+          fotos.id, 
+          fotos.imagen_bin,
+          fotos.descripcion,
+          fotos.fecha_hr,
+          fotos.estado,
+          fotos.id_cliente
+        FROM 
+          fotos, 
+          persona
+        WHERE fotos.id_cliente = persona.id
+        AND persona.ci = ?
+        AND fotos.estado = 'A';`;
+        const [rows]: any[] = await connection.execute(querySql, [ciCliente]);
+        await connection.end();
+        return rows.map(row => (
+          new Foto(
+            row.id,
+            row.imagen_bin,
+            row.descripcion,
+            row.fecha_hr,
+            row.estado,
+            row.id_cliente
+          )
+        ));
+      } 
+      catch (error) {
+        console.error("Error al seleccionar fotos del cliente. Error:", error)
+        return [];
+      }
     }
 
 }

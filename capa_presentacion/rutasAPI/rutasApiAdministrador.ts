@@ -46,7 +46,8 @@ async (req: Request, res: Response) => {
   }
 });
 
-router.post('/buscar_cliente', async (req: Request, res: Response) => {
+router.post('/buscar_cliente', 
+async (req: Request, res: Response) => {
   try {
     const { ci } = req.body;
     const cliente = await gestorCliente.obtenerPersonaPorCi(ci);
@@ -62,5 +63,16 @@ router.post('/buscar_cliente', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/fotosCliente/:ci', 
+async (req: Request, res: Response) => {
+  try {
+    const ciCliente: string = req.params.ci;
+    const fotosCliente = await gestorFotos.obtenerFotosCliente(Number(ciCliente));
+    res.json(fotosCliente);
+  } catch (error) {
+    console.error('Error al traer las fotos:', error);
+    res.status(500).json({ message: 'Error al traer las fotos' });
+  }
+});
 
 export default router;

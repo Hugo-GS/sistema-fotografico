@@ -17,6 +17,7 @@
       "esbenp.prettier-vscode"
       "cweijan.vscode-mysql-client2"
       "jdinhlife.gruvbox"
+      
     ];
     workspace = {
       onCreate = {
