@@ -16,10 +16,10 @@ export class GestorPersona {
 
   /* Clever */
 
-  async crearPersona(nombre: string, apellidoPaterno: string, apellidoMaterno: string): Promise<number | null> {
+  async crearPersona(nombre: string, apellidoPaterno: string, apellidoMaterno: string, ci:string): Promise<number | null> {
     try {
       // Crear nueva persona
-      const nuevaPersona = new Persona(0, nombre, apellidoPaterno, apellidoMaterno, "0");
+      const nuevaPersona = new Persona(0, nombre, apellidoPaterno, apellidoMaterno, ci);
       const idUltimaPersona = await this.PersonaDBContext.crearPersona(nuevaPersona);
 
       if (idUltimaPersona !== null) {
@@ -43,7 +43,7 @@ export class GestorPersona {
     }
   }
 
-  async obtenerTodosLosClientes(): Promise<{ id: number, nombre: string, apellido_paterno: string, apellido_materno: string}[]> {
+  async obtenerTodosLosClientes(): Promise<{ id: number, nombre: string, apellido_paterno: string, apellido_materno: string, ci:string}[]> {
     try {
       const impresionesConValor = await this.PersonaDBContext.seleccionarPersonaPorCliente();
       console.log("Impresiones con valor:", impresionesConValor);
@@ -54,7 +54,7 @@ export class GestorPersona {
     }
   }
 
-  async obtenerPersonaporId(id: number): Promise<{ id: number, nombre: string, apellido_paterno: string, apellido_materno: string }[]> {
+  async obtenerPersonaporId(id: number): Promise<{ id: number, nombre: string, apellido_paterno: string, apellido_materno: string , ciPersona:string }[]> {
     try {
       const personaobtenida = await this.PersonaDBContext.obtenerPersonaPorId(id);
       //console.log("Impresiones con valor:", personaobtenida);
@@ -68,9 +68,9 @@ export class GestorPersona {
   }
 
   
-  async actualizardatosPersona(id: number,nombre:string, apellido_paterno: string,  apellido_materno: string): Promise<void> {
+  async actualizardatosPersona(id: number,nombre:string, apellido_paterno: string,  apellido_materno: string , ci:string): Promise<void> {
     try {
-      await this.PersonaDBContext.actualizarDatosPersona(id, nombre,apellido_paterno,apellido_materno);
+      await this.PersonaDBContext.actualizarDatosPersona(id, nombre,apellido_paterno,apellido_materno,ci);
     } catch (error) {
       console.error("Error al actualizar datos de impresión: ", error);
       throw error;

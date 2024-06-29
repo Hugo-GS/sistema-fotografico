@@ -4,7 +4,7 @@
       <div class="dropdown">
         <div class="dropdown-toggle">
 
-          <div class="input-container">
+          <div class="input-container" style="visibility:hidden;">
             <input type="text"  class="input"  id="" placeholder="" >
             <label class="input-label">Descripción</label>
           </div>
@@ -29,7 +29,10 @@
         </div>
       </div>
       <div class="dropdown">
-        <input type="date">
+        <input id="fecha" type="date">
+      </div>
+      <div class="dropdown">
+        <button id="btnBuscarFotos">Buscar fotos</button>
       </div>
       <div id="viewSwitch">
         <svg id="listView" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list">
@@ -62,18 +65,6 @@
         </thead>
         <tbody>
            
-          <tr>
-            <td>1</td>
-            <td>Dia de campo familiar</td>
-            <td>Juan Perez Goitia</td>
-            <td>2020-02-25</td>
-            <td></td>
-            <td>
-              <label for="">
-                <input type="checkbox" name="" id=""> Seleccionar
-              </label>
-            </td>
-          </tr>
           
         </tbody>
       </table>

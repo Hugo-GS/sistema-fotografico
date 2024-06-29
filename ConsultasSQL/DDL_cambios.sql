@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS persona (
     id  INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50),
     apellido_paterno VARCHAR(50),
-    apellido_materno VARCHAR(50)
+    apellido_materno VARCHAR(50),
+    ci VARCHAR(13)
 ) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS tipousuario (

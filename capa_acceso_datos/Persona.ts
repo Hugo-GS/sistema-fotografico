@@ -111,12 +111,13 @@ export class PersonaDBContext {
     try {
       const connection: mysql.Connection = await mysql.createConnection(this.config);
       const querySql: string = `
-      INSERT INTO persona (nombre, apellido_paterno, apellido_materno)
-      VALUES (?, ? ,?)`;
+      INSERT INTO persona (nombre, apellido_paterno, apellido_materno,ci)
+      VALUES (?, ? ,?,?)`;
       const [result]: any = await connection.execute(querySql, [
         persona.nombre,
         persona.apellidoPaterno,
         persona.apellidoMaterno,
+        persona.ciPersona
       ]);
       await connection.end();
       return result.insertId;
@@ -125,11 +126,11 @@ export class PersonaDBContext {
       return null;
     }
   }
-  async seleccionarPersonaPorCliente(): Promise<{ id: number, nombre: string, apellido_paterno: string, apellido_materno: string}[]> {
+  async seleccionarPersonaPorCliente(): Promise<{ id: number, nombre: string, apellido_paterno: string, apellido_materno: string, ci:string}[]> {
     try {
       const connection: mysql.Connection = await mysql.createConnection(this.config);
       const querySql: string = `
-      select p.id, p.nombre, p.apellido_paterno , p.apellido_materno
+      select p.id, p.nombre, p.apellido_paterno , p.apellido_materno , p.ci
       FROM persona p
       JOIN cliente c on p.id = c.id`;
       const [rows]: any[] = await connection.execute(querySql);
@@ -140,6 +141,7 @@ export class PersonaDBContext {
         nombre: row.nombre,
         apellido_paterno: row.apellido_paterno,
         apellido_materno: row.apellido_materno,
+        ci: row.ci
       }));
     } catch (error) {
       console.error("Error al seleccionar impresiones con valor: ", error);
@@ -151,20 +153,22 @@ export class PersonaDBContext {
     id: number,
     nombre: string,
     apellidoPaterno: string,
-    apellidoMaterno: string): Promise<void> {
+    apellidoMaterno: string,
+    ciPersona: string): Promise<void> {
     const connection = await mysql.createConnection(this.config);
     try {
       await connection.beginTransaction();
 
       const updateImpresionQuery = `
       UPDATE persona 
-      SET nombre = ?, apellido_paterno = ?, apellido_materno = ?
+      SET nombre = ?, apellido_paterno = ?, apellido_materno = ? , ci = ?
       WHERE id = ?`;
       await connection.execute(updateImpresionQuery, [
         nombre,
         apellidoPaterno,
         apellidoMaterno,
-        id,
+        ciPersona,
+        id
       ]);
       await connection.commit();
     } catch (error) {
@@ -176,11 +180,11 @@ export class PersonaDBContext {
     }
   }
   
-  async obtenerPersonaPorId(idPersona: number): Promise<{ id: number, nombre: string, apellido_paterno: string, apellido_materno: string }[]> {
+  async obtenerPersonaPorId(idPersona: number): Promise<{ id: number, nombre: string, apellido_paterno: string, apellido_materno: string , ciPersona: string }[]> {
     try {
       const connection: mysql.Connection = await mysql.createConnection(this.config);
       const querySql: string = `
-        SELECT id, nombre, apellido_paterno, apellido_materno 
+        SELECT id, nombre, apellido_paterno, apellido_materno , ci
         FROM persona 
         WHERE id = ?`;
         const [rows]: any[] = await connection.execute(querySql,[idPersona]);
@@ -191,6 +195,7 @@ export class PersonaDBContext {
         nombre: row.nombre,
         apellido_paterno: row.apellido_paterno,
         apellido_materno: row.apellido_materno,
+        ciPersona: row.ci
       }));
     } catch (error) {
       console.error("Error al seleccionar impresiones con valor: ", error);
@@ -202,7 +207,7 @@ export class PersonaDBContext {
     try {
       const connection: mysql.Connection = await mysql.createConnection(this.config);
       const querySql: string = `
-        SELECT id, nombre, apellido_paterno, apellido_materno 
+        SELECT id, nombre, apellido_paterno, apellido_materno, ci
         FROM persona 
         WHERE id = ?`;
         const [filas]: any = await connection.execute(querySql, [id]);

@@ -3,6 +3,7 @@ import { GestorPersona } from "../../capa_logica_negocio/GestorPersona";
 import { GestorCliente } from "../../capa_logica_negocio/GestorCliente";
 import { GestorFotos } from "../../capa_logica_negocio/GestorFotos";
 import { Persona } from '../../capa_acceso_datos/Persona';
+import { Foto } from '../../capa_acceso_datos/Fotos';
 
 const router: Router = Router();
 const gestorPersona: GestorPersona = new GestorPersona();
@@ -63,16 +64,32 @@ async (req: Request, res: Response) => {
   }
 });
 
-router.get('/fotosCliente/:ci', 
-async (req: Request, res: Response) => {
+router.get('/fotosCliente/:ci', async (req: Request, res: Response) => {
   try {
     const ciCliente: string = req.params.ci;
-    const fotosCliente = await gestorFotos.obtenerFotosCliente(Number(ciCliente));
-    res.json(fotosCliente);
+    const fecha: string | undefined = req.query.fecha as string;
+    console.log(fecha)
+    let fotosCliente: Foto[];
+    if (fecha) {
+      const fechaDate = new Date(fecha);
+      fotosCliente = await gestorFotos.obtenerFotosCliente(Number(ciCliente), fechaDate);
+    } else {
+      fotosCliente = await gestorFotos.obtenerFotosCliente(Number(ciCliente));
+    }
+
+    // Convertir las imágenes a Base64
+    const fotosClienteFormatted = fotosCliente.map(foto => ({
+      ...foto,
+      imagen_bin: foto.imagen_bin.toString()
+    }));
+
+    res.json(fotosClienteFormatted);
   } catch (error) {
     console.error('Error al traer las fotos:', error);
     res.status(500).json({ message: 'Error al traer las fotos' });
   }
 });
+
+
 
 export default router;

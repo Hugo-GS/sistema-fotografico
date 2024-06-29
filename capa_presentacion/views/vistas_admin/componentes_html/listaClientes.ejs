@@ -8,6 +8,8 @@
             <th>Nombre</th>
             <th>Apellido Paterno</th>
             <th>Apellido Materno</th>
+            <th>CI</th>
+            <th>Accion</th>
         </tr>
     </thead>
     <tbody>
@@ -17,6 +19,7 @@
                 <td><%= cliente.nombre %></td>
                 <td><%= cliente.apellido_paterno %></td>
                 <td><%= cliente.apellido_materno %></td>
+                <td><%= cliente.ci %></td>
                 <td>
                     <a href="/sistemaAdmin/editar_cliente/<%= cliente.id %> ">Editar</a>
             </td>

@@ -55,11 +55,10 @@ export class FotosDBContext {
           }
     }
 
-    async seleccionarFotosPorCiCliente(ciCliente: number): Promise<Foto[]> {
+    async seleccionarFotosPorCiCliente(ciCliente: number, fecha: Date | null = null): Promise<Foto[]> {
       try {
-        const connection: mysql.Connection = await mysql.createConnection(
-          this.config);
-        const querySql: string = `
+        const connection: mysql.Connection = await mysql.createConnection(this.config);
+        let querySql: string = `
         SELECT  
           fotos.id, 
           fotos.imagen_bin,
@@ -72,8 +71,18 @@ export class FotosDBContext {
           persona
         WHERE fotos.id_cliente = persona.id
         AND persona.ci = ?
-        AND fotos.estado = 'A';`;
-        const [rows]: any[] = await connection.execute(querySql, [ciCliente]);
+        AND fotos.estado = 'A'
+        AND fotos.imagen_bin IS NOT NULL `;
+  
+        const params: any[] = [ciCliente];
+        
+        if (fecha!=null) {
+          querySql += ` AND DATE(fotos.fecha_hr) = ?`;
+          params.push(fecha.toISOString().split('T')[0]);
+        }
+
+        const [rows]: any[] = await connection.execute(querySql, params);
+
         await connection.end();
         return rows.map(row => (
           new Foto(
@@ -85,11 +94,10 @@ export class FotosDBContext {
             row.id_cliente
           )
         ));
-      } 
-      catch (error) {
-        console.error("Error al seleccionar fotos del cliente. Error:", error)
+      } catch (error) {
+        console.error("Error al seleccionar fotos del cliente. Error:", error);
         return [];
       }
     }
-
+  
 }

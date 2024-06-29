@@ -13,10 +13,9 @@ export class GestorFotos {
     await this.fotosDBContext.insertFoto(foto);
   }
   
-  async obtenerFotosCliente(ciCliente: number): Promise<Foto[]> {
-    const fotosCliente: Foto[] = await 
-      this.fotosDBContext.seleccionarFotosPorCiCliente(ciCliente);
-    return fotosCliente;
+  async obtenerFotosCliente(ciCliente: number, fecha: Date | null = null): Promise<Foto[]> {
+    return await this.fotosDBContext.seleccionarFotosPorCiCliente(ciCliente, fecha);
   }
+
   
 }

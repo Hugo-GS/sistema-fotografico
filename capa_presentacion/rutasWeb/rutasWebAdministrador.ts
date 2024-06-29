@@ -110,10 +110,10 @@ async (req: Request, res: Response) => {
 
 // Post de registrar_cliente  
 router.post('/registrar_cliente', async (req: Request, res: Response) => {
-  const { nombre, apellido_paterno, apellido_materno } = req.body;
+  const { nombre, apellido_paterno, apellido_materno,ci } = req.body;
   
   try {
-    await gestorPersona.crearPersona(nombre, apellido_paterno, apellido_materno);
+    await gestorPersona.crearPersona(nombre, apellido_paterno, apellido_materno,ci);
     return res.redirect('/sistemaAdmin/?estado=ok');
   } catch (error) {
     console.error("Error al crear cliente: ", error);
@@ -196,10 +196,10 @@ router.get('/editar_cliente/:id', async (req, res) => {
 });
 
 router.post('/editar_cliente/:id', async (req: Request, res: Response) => {
-  const { id,nombre, apellido_paterno, apellido_materno } = req.body;
+  const { id,nombre, apellido_paterno, apellido_materno,ci } = req.body;
   const idcliente = req.params.id;
   try {
-    await gestorPersona.actualizardatosPersona(Number(id),nombre, apellido_paterno, apellido_materno);
+    await gestorPersona.actualizardatosPersona(Number(id),nombre, apellido_paterno, apellido_materno,ci);
     return res.redirect('/sistemaAdmin/verClientes/?estado=ok');
   } catch (error) {
     console.error("Error al actualizar impresión:", error);

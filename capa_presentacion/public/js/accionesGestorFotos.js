@@ -93,8 +93,6 @@ function initComponenteCargarFoto() {
 
     Promise.all(promises)
       .then((results) => {
-       
-
         for (const result of results) {
           sendFileToServer(result.byteArray, result.fileName);
         }
@@ -193,6 +191,30 @@ async function buscarCliente(ciCliente) {
   return data;
 }
 
+async function obtenerFotosCliente(ciCliente, fecha = null) {
+  const url = new URL(`/api_admin/fotosCliente/${ciCliente}`, window.location.origin);
+  if (fecha) {
+    url.searchParams.append('fecha', fecha);
+  }
+
+  const response = await fetch(url.toString(), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error('Error en la respuesta del servidor');
+  }
+
+  const data = await response.json();
+  return data;
+}
+
+
+
+
 function initComponenteBuscadorFotos() {
   const btnBuscarCliente = document.getElementById("btnBuscarCliente");
   const searchCliente = document.getElementById("searchCliente");
@@ -203,6 +225,8 @@ function initComponenteBuscadorFotos() {
   const photoTable = document.getElementById("photoTable");
   const photoGrid = document.getElementById("photoGrid");
   const $clienteSelect = document.getElementById("cliente");
+  const btnBuscarFotos = document.getElementById("btnBuscarFotos");
+  const fechaInput = document.getElementById("fechaInput");
   let ciClienteSeleccionado = null;
 
   btnBuscarCliente.addEventListener("click", async () => {
@@ -212,7 +236,7 @@ function initComponenteBuscadorFotos() {
   });
 
   function mostrarDatosCliente(clienteData) {
-
+    ciClienteSeleccionado = searchCliente.value;
     clienteList.innerHTML = `
       <li style="padding:3px; border-radius:5px; background-color: #ececec; margin-top:5px;">${clienteData.nombre} ${clienteData.apellidoPaterno} ${clienteData.apellidoMaterno} 
       <button 
@@ -222,29 +246,60 @@ function initComponenteBuscadorFotos() {
       </button>
       </li>`;
     
-      document.getElementById('btnSeleccionarCliente').addEventListener("click", ()=>{
+      document.getElementById('btnSeleccionarCliente').addEventListener("click", () => {
         seleccionarClienteBusquedaFoto(`${clienteData.nombre} ${clienteData.apellidoPaterno} ${clienteData.apellidoMaterno}`);
-      })
-    
+      });
   }
+
+
+  function mostrarFotos(fotos) {
+    const tbody = photoTable.querySelector('tbody');
+    tbody.innerHTML = '';
+    
+    fotos.forEach(foto => {
+      const row = document.createElement('tr');
+      const imagenBin = foto.imagen_bin ? `data:image/png;base64,${foto.imagen_bin}` : '';
+      row.innerHTML = `
+        <td>${foto.id}</td>
+        <td>${foto.descripcion}</td>
+        <td>${foto.id_cliente}</td>
+        <td>${foto.fecha_hr}</td>
+        <td><img src="${imagenBin}" alt="Miniatura" width="80" height="80"/></td>
+        <td>
+          <label>
+            <input type="checkbox" /> Seleccionar
+          </label>
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+  
 
   function seleccionarClienteBusquedaFoto(nombreCompleto) {
-      ciClienteSeleccionado = searchCliente;
-      const $option = $clienteSelect.querySelector("option");
-      $option.textContent = nombreCompleto;
+    const $option = $clienteSelect.querySelector("option");
+    $option.textContent = nombreCompleto;
   }
 
-listView.addEventListener("click", () => {
-  photoTable.classList.remove("hidden");
-  photoGrid.classList.add("hidden");
-});
-/*
-gridView.addEventListener("click", () => {
-  photoTable.classList.add("hidden");
-  photoGrid.classList.remove("hidden");
-});*/
+  listView.addEventListener("click", () => {
+    photoTable.classList.remove("hidden");
+    photoGrid.classList.add("hidden");
+  });
+  //---------------------------------------------
+  btnBuscarFotos.addEventListener("click", async () => {
+    if (ciClienteSeleccionado) {
+      if (fechaInput.value != ""){
+        const fotos = await obtenerFotosCliente(ciClienteSeleccionado,fechaInput.value);
+        mostrarFotos(fotos);
+      }else{
+        const fotos = await obtenerFotosCliente(ciClienteSeleccionado);
+        mostrarFotos(fotos);
+      }
+    } else {
+      alert('Selecciona un cliente primero.');
+    }
+  });
 
-//--------------------------------------------------
 
-
+  
 }
