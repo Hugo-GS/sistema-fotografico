@@ -1,5 +1,7 @@
 CREATE DATABASE sisventafoto;
 
+DROP DATABASE sisventafoto;
+
 USE sisventafoto;
 
 -- db: sisventafoto
@@ -41,13 +43,14 @@ CREATE TABLE IF NOT EXISTS encargado (
 
 CREATE TABLE IF NOT EXISTS fotos (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    imagen_bin BLOB,
+    imagen_bin LONGBLOB,
     descripcion VARCHAR(255),
     fecha_hr DATETIME NULL,
     estado CHAR(1),
     id_cliente INT,
     FOREIGN KEY (id_cliente) REFERENCES cliente (id)
 ) ENGINE = InnoDB;
+
 
 CREATE TABLE IF NOT EXISTS sucursal (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -107,13 +110,14 @@ CREATE TABLE IF NOT EXISTS detalleventa (
     precio_impresion DECIMAL(10, 2) NOT NULL,
     precio_servicio DECIMAL(10, 2) NOT NULL,
     id_foto INT NOT NULL,
-    PRIMARY KEY (id_venta, id_impresion),
+    PRIMARY KEY (id_venta, id_impresion, id_foto),
     FOREIGN KEY (id_venta) REFERENCES venta (id),
     FOREIGN KEY (id_impresion) REFERENCES impresion (id),
     FOREIGN KEY (id_foto) REFERENCES fotos(id)
 ) ENGINE = InnoDB;
 
-ALTER TABLE IF NOT EXISTS conceptobonodescuento (
+
+CREATE TABLE IF NOT EXISTS conceptobonodescuento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     concepto varchar(50) not null,
     tipo char(1),

@@ -1,0 +1,8 @@
+TYPE=TRIGGERS
+triggers='CREATE DEFINER=`root`@`localhost` TRIGGER trg_antes_de_insertar_persona\nBEFORE INSERT ON persona\nFOR EACH ROW\nBEGIN\n    -- Verificar duplicados por nombre completo\n    IF EXISTS (SELECT 1 FROM persona \n               WHERE nombre = NEW.nombre \n               AND apellido_paterno = NEW.apellido_paterno \n               AND apellido_materno = NEW.apellido_materno) THEN\n        SIGNAL SQLSTATE \'45000\' SET MESSAGE_TEXT = \'Esta persona ya está registrada.\';\n    END IF;\n\n    -- Verificar duplicados por ci\n    IF EXISTS (SELECT 1 FROM persona \n               WHERE ci = NEW.ci) THEN\n        SIGNAL SQLSTATE \'45000\' SET MESSAGE_TEXT = \'El CI ya está registrado.\';\n    END IF;\nEND' 'CREATE DEFINER=`root`@`localhost` TRIGGER trg_antes_de_actualizar_persona\nBEFORE UPDATE ON persona\nFOR EACH ROW\nBEGIN\n    -- Verificar duplicados por nombre completo\n    IF EXISTS (SELECT 1 FROM persona \n               WHERE nombre = NEW.nombre \n               AND apellido_paterno = NEW.apellido_paterno \n               AND apellido_materno = NEW.apellido_materno \n               AND id != OLD.id) THEN\n        SIGNAL SQLSTATE \'45000\' SET MESSAGE_TEXT = \'Esta persona ya está registrada.\';\n    END IF;\n\n    -- Verificar duplicados por ci\n    IF EXISTS (SELECT 1 FROM persona \n               WHERE ci = NEW.ci \n               AND id != OLD.id) THEN\n        SIGNAL SQLSTATE \'45000\' SET MESSAGE_TEXT = \'El CI ya está registrado.\';\n    END IF;\nEND'
+sql_modes=1411383304 1411383304
+definers='root@localhost' 'root@localhost'
+client_cs_names='utf8mb4' 'utf8mb4'
+connection_cl_names='utf8mb4_unicode_ci' 'utf8mb4_unicode_ci'
+db_cl_names='utf8mb4_unicode_ci' 'utf8mb4_unicode_ci'
+created=1719679463980979 1719679466438678

@@ -109,7 +109,7 @@ function initComponenteCargarFoto() {
   }
 
   function sendFileToServer(byteArray, fileName) {
-    alert(idClienteSeleccionado);
+    
     fetch("/api_admin/subir_foto", {
       method: "POST",
       headers: {
@@ -227,12 +227,14 @@ function initComponenteBuscadorFotos() {
   const $clienteSelect = document.getElementById("cliente");
   const btnBuscarFotos = document.getElementById("btnBuscarFotos");
   const fechaInput = document.getElementById("fechaInput");
+  const btnRealizarServicio = document.getElementById("btnRealizarServicio");
   let ciClienteSeleccionado = null;
 
   btnBuscarCliente.addEventListener("click", async () => {
     const query = searchCliente.value;
     const clienteData = await buscarCliente(query);
     mostrarDatosCliente(clienteData);
+    
   });
 
   function mostrarDatosCliente(clienteData) {
@@ -247,7 +249,7 @@ function initComponenteBuscadorFotos() {
       </li>`;
     
       document.getElementById('btnSeleccionarCliente').addEventListener("click", () => {
-        seleccionarClienteBusquedaFoto(`${clienteData.nombre} ${clienteData.apellidoPaterno} ${clienteData.apellidoMaterno}`);
+        seleccionarClienteBusquedaFoto(`${clienteData.nombre} ${clienteData.apellidoPaterno} ${clienteData.apellidoMaterno}`, clienteData.id);
       });
   }
 
@@ -276,9 +278,11 @@ function initComponenteBuscadorFotos() {
   }
   
 
-  function seleccionarClienteBusquedaFoto(nombreCompleto) {
+  function seleccionarClienteBusquedaFoto(nombreCompleto, idCliente) {
     const $option = $clienteSelect.querySelector("option");
     $option.textContent = nombreCompleto;
+    $option.id = "idClienteOption";
+    $option.value = idCliente;
   }
 
   listView.addEventListener("click", () => {
@@ -301,5 +305,96 @@ function initComponenteBuscadorFotos() {
   });
 
 
+  function obtenerFotosSeleccionadas() {
+    const selectedIds = [];
+    const rows = document.querySelectorAll('#photoTable tbody tr');
   
+    rows.forEach(row => {
+      const checkbox = row.querySelector('input[type="checkbox"]');
+      if (checkbox && checkbox.checked) {
+        const id = row.querySelector('td:first-child').textContent;
+        selectedIds.push(id);
+      }
+    });
+  
+    return selectedIds;
+  }
+
+  btnRealizarServicio.addEventListener("click", ()=>{
+    const selectedIds = obtenerFotosSeleccionadas();
+    
+    if(selectedIds.length <= 0){
+      alert("No se ha seleccionado ninguna foto");
+      return
+    }
+    const serviciosCTN = document.getElementById("serviciosCTN");
+    serviciosCTN.classList.remove("hidden-ctn")
+
+  });
+  const btnCerrarVentanaRealizarServicios = document.getElementById("btnCerrarVentanaRealizarServicios");
+  btnCerrarVentanaRealizarServicios.addEventListener("click", ()=>{
+    const serviciosCTN = document.getElementById("serviciosCTN");
+    serviciosCTN.classList.add("hidden-ctn")
+
+  });
+
+}
+
+function seleccionarServicio(idServicio, precio) {
+  const serviciosCTN = document.getElementById("serviciosCTN");
+  serviciosCTN.classList.add("hidden-ctn");
+
+  const selectedIds = obtenerFotosSeleccionadasG();
+  console.log('IDs de fotos seleccionadas:', selectedIds);
+
+  const idCliente = document.getElementById("cliente").value; 
+  const idEncargado = 6;
+  const totalGeneral = Number(precio)*selectedIds.length;
+
+  const payload = {
+    idServicio: idServicio,
+    idsFotos: selectedIds,
+    idCliente: idCliente,
+    idEncargado: idEncargado,
+    totalGeneral: totalGeneral,
+    precioServicio: Number(precio)
+  };
+
+  fetch('/api_admin/realizarServicio', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Error al realizar el servicio');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data.message);
+      alert("La venta se ha realizado correctamente!")
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
+
+
+
+function obtenerFotosSeleccionadasG() {
+  const selectedIds = [];
+  const rows = document.querySelectorAll('#photoTable tbody tr');
+
+  rows.forEach(row => {
+    const checkbox = row.querySelector('input[type="checkbox"]');
+    if (checkbox && checkbox.checked) {
+      const id = row.querySelector('td:first-child').textContent;
+      selectedIds.push(id);
+    }
+  });
+
+  return selectedIds;
 }

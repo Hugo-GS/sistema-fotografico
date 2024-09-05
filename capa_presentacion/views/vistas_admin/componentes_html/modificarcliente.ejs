@@ -1,7 +1,40 @@
 <%- include('header') %>
+<style>
+  legend{
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .formulario_sistema{
+    width: 300px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    padding: 10px;
+  }
+  .formulario_sistema_fieldset {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+  }
+  .formulario_sistema_fieldset div{
+    margin-bottom: 10px;
+  }
+  label{
+    display: inline-block;
+    width: 100px;
+  }
+  input[type="submit"]{
+    margin-top: 15px;
+    border-radius: 5px;
+    background-color: #FF6471;
+    border: none;
+    padding: 5px;
+    color: white;
+  }
+</style>
     <div id="contenedorPrincipal" class="contenedor_principal">
         <form action="/sistemaAdmin/editar_cliente/<%= datosEditar.id %>"  method="post" class="formulario_sistema">
-            <fieldset>
+            <fieldset class="formulario_sistema_fieldset">
               <input type="hidden" maxlength="255" name="id" value="<%= datosEditar.id %>" required />
               <legend>Modificar Cliente</legend>
               <div>

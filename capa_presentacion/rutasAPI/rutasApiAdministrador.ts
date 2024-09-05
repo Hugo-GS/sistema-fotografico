@@ -4,11 +4,13 @@ import { GestorCliente } from "../../capa_logica_negocio/GestorCliente";
 import { GestorFotos } from "../../capa_logica_negocio/GestorFotos";
 import { Persona } from '../../capa_acceso_datos/Persona';
 import { Foto } from '../../capa_acceso_datos/Fotos';
+import { GestorImpresion } from '../../capa_logica_negocio/GestorImpresion';
 
 const router: Router = Router();
 const gestorPersona: GestorPersona = new GestorPersona();
 const gestorFotos: GestorFotos = new GestorFotos();
 const gestorCliente: GestorCliente = new GestorCliente();
+const gestorImpresion = new GestorImpresion();
 
 
 router.get('/persona/:id', 
@@ -87,6 +89,22 @@ router.get('/fotosCliente/:ci', async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error al traer las fotos:', error);
     res.status(500).json({ message: 'Error al traer las fotos' });
+  }
+});
+
+router.post('/realizarServicio', 
+async (req: Request, res: Response) => {
+  try {
+    const { idServicio, idsFotos, idCliente, idEncargado, totalGeneral, precioServicio } = req.body;
+    if (!idServicio || !idsFotos || !idCliente || !idEncargado || !totalGeneral) {
+      return res.status(400).json({ message: 'Faltan datos necesarios' });
+    }
+
+    await gestorImpresion.realizarServicio(idServicio, idsFotos, idCliente, idEncargado, totalGeneral, precioServicio);
+    res.json({ message: 'Servicio realizado exitosamente' });
+  } catch (error) {
+    console.error('Error al realizar el servicio:', error);
+    res.status(500).json({ message: 'Error al realizar el servicio' });
   }
 });
 

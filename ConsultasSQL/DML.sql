@@ -1,15 +1,15 @@
--- Active: 1718458203512@@127.0.0.1@3306@sisventafoto
+-- Active: 1718896990540@@127.0.0.1@3306@sisventafoto
 -- Seccion Hugo====
 -- Insertar en la tabla `tipousuario`
 INSERT INTO tipousuario (tipo) VALUES ('A');
 INSERT INTO tipousuario (tipo) VALUES ('E');
 
 -- Personas - clientes
-INSERT INTO persona (nombre, apellido_paterno, apellido_materno) VALUES ('Juan', 'Pérez', 'Gómez');
-INSERT INTO persona (nombre, apellido_paterno, apellido_materno) VALUES ('María', 'López', 'Fernández');
-INSERT INTO persona (nombre, apellido_paterno, apellido_materno) VALUES ('Carlos', 'García', 'Martínez');
-INSERT INTO persona (nombre, apellido_paterno, apellido_materno) VALUES ('Ana', 'Rodríguez', 'Sánchez');
-INSERT INTO persona (nombre, apellido_paterno, apellido_materno) VALUES ('Luis', 'Hernández', 'Ruiz');
+INSERT INTO persona (nombre, apellido_paterno, apellido_materno, ci) VALUES ('Juan', 'Pérez', 'Gómez', '111');
+INSERT INTO persona (nombre, apellido_paterno, apellido_materno,ci) VALUES ('María', 'López', 'Fernández', '112');
+INSERT INTO persona (nombre, apellido_paterno, apellido_materno,ci) VALUES ('Carlos', 'García', 'Martínez', '113');
+INSERT INTO persona (nombre, apellido_paterno, apellido_materno,ci) VALUES ('Ana', 'Rodríguez', 'Sánchez', '114');
+INSERT INTO persona (nombre, apellido_paterno, apellido_materno,ci) VALUES ('Luis', 'Hernández', 'Ruiz', '115');
 
 -- Personas -- Encargados
 INSERT INTO persona (nombre, apellido_paterno, apellido_materno) VALUES ('Pedro', 'González', 'López');
@@ -89,11 +89,11 @@ INSERT INTO impresion (nombre, descripciondetalleproducto, estado) VALUES ('Impr
 INSERT INTO impresion (nombre, descripciondetalleproducto, estado) VALUES ('Impresión A', 'Hoja grande 20x27 cm', 'A');
 
 -- Insertar en la tabla `precio`
-INSERT INTO precio (fech_hr_inicio, fecha_hr_fin, valor, id_impresion) VALUES ('2019-04-01 00:00:00', NULL, 10.00, 1);
-INSERT INTO precio (fech_hr_inicio, fecha_hr_fin, valor, id_impresion) VALUES ('2019-04-01 00:00:00', NULL, 20.00, 2);
-INSERT INTO precio (fech_hr_inicio, fecha_hr_fin, valor, id_impresion) VALUES ('2019-04-01 00:00:00', NULL, 30.00, 3);
-INSERT INTO precio (fech_hr_inicio, fecha_hr_fin, valor, id_impresion) VALUES ('2019-04-01 00:00:00', NULL, 50.00, 4);
-INSERT INTO precio (fech_hr_inicio, fecha_hr_fin, valor, id_impresion) VALUES ('2019-04-01 00:00:00', NULL, 60.00, 5);
+INSERT INTO precio (fecha_hr_inicio, fecha_hr_fin, valor, id_impresion) VALUES ('2019-04-01 00:00:00', NULL, 10.00, 1);
+INSERT INTO precio (fecha_hr_inicio, fecha_hr_fin, valor, id_impresion) VALUES ('2019-04-01 00:00:00', NULL, 20.00, 2);
+INSERT INTO precio (fecha_hr_inicio, fecha_hr_fin, valor, id_impresion) VALUES ('2019-04-01 00:00:00', NULL, 30.00, 3);
+INSERT INTO precio (fecha_hr_inicio, fecha_hr_fin, valor, id_impresion) VALUES ('2019-04-01 00:00:00', NULL, 50.00, 4);
+INSERT INTO precio (fecha_hr_inicio, fecha_hr_fin, valor, id_impresion) VALUES ('2019-04-01 00:00:00', NULL, 60.00, 5);
 
 -- Insertar en la tabla `conceptobonodescuento`
 INSERT INTO conceptobonodescuento (concepto, tipo, valor) VALUES ('Descuento Antiguedad Marqueteria', 'P', 10.00);-- P Porcentual

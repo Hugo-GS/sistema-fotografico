@@ -29,10 +29,13 @@
         </div>
       </div>
       <div class="dropdown">
-        <input id="fecha" type="date">
+        <input id="fechaInput" type="date">
       </div>
       <div class="dropdown">
         <button id="btnBuscarFotos">Buscar fotos</button>
+      </div>
+      <div class="dropdown">
+        <button style="background-color: #00543D;" id="btnRealizarServicio">Realizar Servicio</button>
       </div>
       <div id="viewSwitch">
         <svg id="listView" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list">
@@ -73,3 +76,33 @@
       </div>
     </div>
   </div>
+
+
+<div id="serviciosCTN" class="container_buscar_fotos hidden-ctn">
+  <h1>Lista de Servicios fotograficos</h1>
+  <table>
+  <thead>
+      <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Descripción Detalle Producto</th>
+      <th>Valor</th>
+      <th>Acciones</th>
+      </tr>
+  </thead>
+  <tbody>
+      <% impresion.forEach(impresion => { %>
+          <tr>
+              <td><%= impresion.id %></td>
+              <td><%= impresion.nombre %></td>
+              <td><%= impresion.descripciondetalleproducto %></td>
+              <td><%= impresion.valor %></td>
+              <td>
+                <button id="btnSeleccionarServicio" onclick="seleccionarServicio('<%= impresion.id %>', '<%= impresion.valor %>')">Seleccionar Servicio</button>
+              </td>
+          </tr>
+      <% }); %>
+  </tbody>
+  </table>
+  <button id="btnCerrarVentanaRealizarServicios">Cerrar</button>
+</div>

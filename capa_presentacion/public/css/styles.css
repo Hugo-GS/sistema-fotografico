@@ -564,3 +564,11 @@ button{
 
 /* Fin gestor fotos */
 
+#serviciosCTN{
+  position: fixed;
+  top:10px;
+  margin-left: 25%;
+}
+.hidden-ctn{
+  display: none;
+}

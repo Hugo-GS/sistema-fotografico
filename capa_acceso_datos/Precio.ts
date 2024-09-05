@@ -34,7 +34,7 @@ export class PrecioDBContext {
     try {
       const connection: mysql.Connection = await mysql.createConnection(this.config);
       const querySql: string = `
-      INSERT INTO precio (fech_hr_inicio, fecha_hr_fin, valor, id_impresion)
+      INSERT INTO precio (fecha_hr_inicio, fecha_hr_fin, valor, id_impresion)
       VALUES (?, ?, ?, ?)`;
       const [result]: any = await connection.execute(querySql, [
         precio.fechaHrInicio,
@@ -54,7 +54,7 @@ export class PrecioDBContext {
     try {
       const connection: mysql.Connection = await mysql.createConnection(this.config);
       const querySql: string = `
-      SELECT id, fech_hr_inicio, fecha_hr_fin, valor, id_impresion 
+      SELECT id, fecha_hr_inicio, fecha_hr_fin, valor, id_impresion 
       FROM precio WHERE id = ?`;
       const [filas]: any = await connection.execute(querySql, [idPrecio]);
       

@@ -37,7 +37,9 @@ async (req: Request, res: Response) => {
 
 router.get('/view_buscador_fotos', 
 async (req: Request, res: Response) => {
-  return  res.render(componente('gestor-busqueda-fotos'));
+  const impresion = await gestorImpresion.obtenerImpresionesConValor(); // Obtener las impresiones desde el gestor
+      
+  return  res.render(componente('gestor-busqueda-fotos'), {impresion});
 });
 
 
@@ -139,9 +141,7 @@ router.get('/verImpresiones', async (req: Request, res: Response) => {
 // Ruta para mostrar la lista de clientes
 router.get('/verClientes', async (req: Request, res: Response) => {
   try {
-      
-      const cliente = await gestorPersona.obtenerTodosLosClientes(); // Implementa este método en GestorImpresion
-      //res.render('listaClientes', { cliente }); // Renderizar la vista listaClientes con los datos obtenidos
+      const cliente = await gestorPersona.obtenerTodosLosClientes(); 
       
       res.render(componente('listaClientes'), { cliente });
   } catch (error) {
@@ -169,7 +169,7 @@ router.post('/editar_impresion/:id', async (req: Request, res: Response) => {
   const idimpresion = req.params.id;
   try {
     await gestorImpresion.actualizarDatosImpresion(Number(id), nombre, descripcionDetalleProducto, estado, valor);
-    return res.redirect('/sistemaAdmin/verImpresiones?estado=ok');
+    return res.redirect('/sistemaAdmin/#/GestorServicios/verImpresiones');
   } catch (error) {
     console.error("Error al actualizar impresión:", error);
     return res.redirect('/sistemaAdmin/verImpresiones?estado=error');
@@ -200,7 +200,7 @@ router.post('/editar_cliente/:id', async (req: Request, res: Response) => {
   const idcliente = req.params.id;
   try {
     await gestorPersona.actualizardatosPersona(Number(id),nombre, apellido_paterno, apellido_materno,ci);
-    return res.redirect('/sistemaAdmin/verClientes/?estado=ok');
+    return res.redirect('/sistemaAdmin/#/GestorClientes/verClientes');
   } catch (error) {
     console.error("Error al actualizar impresión:", error);
     return res.redirect('/sistemaAdmin/verClientes/?estado=error');

@@ -1,6 +1,45 @@
 import { configuracion } from "./configuracion_global";
 import * as mysql from "mysql2/promise";
 
+export class Venta {
+  id: number;
+  estado: string;
+  fecha_hr: string;
+  total_general: number;
+  id_encargado: number;
+  id_cliente: number;
+
+  constructor(id: number, estado: string, fecha_hr: string, total_general: number, id_encargado: number, id_cliente: number) {
+    this.id = id;
+    this.estado = estado;
+    this.fecha_hr = fecha_hr;
+    this.total_general = total_general;
+    this.id_encargado = id_encargado;
+    this.id_cliente = id_cliente;
+  }
+}
+
+
+export class DetalleVenta {
+  id_venta: number;
+  id_impresion: number;
+  cantidad: number;
+  precio_impresion: number;
+  precio_servicio: number;
+  id_foto: number;
+
+  constructor(id_venta: number, id_impresion: number, cantidad: number, precio_impresion: number, precio_servicio: number, id_foto: number) {
+    this.id_venta = id_venta;
+    this.id_impresion = id_impresion;
+    this.cantidad = cantidad;
+    this.precio_impresion = precio_impresion;
+    this.precio_servicio = precio_servicio;
+    this.id_foto = id_foto;
+  }
+}
+
+
+
 export class Impresion {
     id: number;
     nombre: string;
@@ -15,7 +54,7 @@ export class Impresion {
     }
   }
 
-  export class ImpresionDBContext {
+export class ImpresionDBContext {
     private config: typeof configuracion;
     
     constructor() {
@@ -124,7 +163,7 @@ export class Impresion {
 
 
       const queryinsert: string = `
-        INSERT INTO precio (fech_hr_inicio, fecha_hr_fin, valor, id_impresion)
+        INSERT INTO precio (fecha_hr_inicio, fecha_hr_fin, valor, id_impresion)
         VALUES (?, ?, ?, ?)`;
         
 
@@ -143,5 +182,43 @@ export class Impresion {
       await connection.end();
     }
   }
-      
+  async insertVenta(venta: Venta): Promise<number> {
+    try {
+      const connection: mysql.Connection = await mysql.createConnection(this.config);
+      const querySql: string = `INSERT INTO venta (estado, fecha_hr, total_general, id_encargado, id_cliente) VALUES (?, ?, ?, ?, ?)`;
+      const [result]: any = await connection.execute(querySql, [
+        venta.estado,
+        venta.fecha_hr,
+        venta.total_general,
+        venta.id_encargado,
+        venta.id_cliente
+      ]);
+      await connection.end();
+      return result.insertId;
+    } catch (error) {
+      console.error("Error al insertar registro en Venta: ", error);
+      throw error;
+    }
+  }
+
+  async insertDetalleVenta(detalleVenta: DetalleVenta) {
+    try {
+      const connection: mysql.Connection = await mysql.createConnection(this.config);
+      const querySql: string = `INSERT INTO detalleventa (id_venta, id_impresion, cantidad, precio_impresion, precio_servicio, id_foto) VALUES (?, ?, ?, ?, ?, ?)`;
+      await connection.execute(querySql, [
+        detalleVenta.id_venta,
+        detalleVenta.id_impresion,
+        detalleVenta.cantidad,
+        detalleVenta.precio_impresion,
+        detalleVenta.precio_servicio,
+        detalleVenta.id_foto
+      ]);
+      await connection.end();
+    } catch (error) {
+      console.error("Error al insertar registro en DetalleVenta: ", error);
+      throw error;
+    }
+  }
+
+
 }
