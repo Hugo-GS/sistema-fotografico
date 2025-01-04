@@ -24,59 +24,10 @@ export class Persona {
 
 export class PersonaDBContext {
   private config: typeof configuracion;
-  
+
   constructor() {
     this.config = configuracion;
   }
-/*
-  async crearPersona(persona: Persona): Promise<void> {
-    try {
-      const connection: mysql.Connection = await mysql.createConnection(
-        this.config
-      );
-      const querySql: string = `
-      INSERT INTO persona 
-      (nombre, apellido_paterno, apellido_materno, ci)
-      VALUES (?, ?, ?, ?)`;
-      await connection.execute(querySql, [
-        persona.nombre,
-        persona.apellidoPaterno,
-        persona.apellidoMaterno,
-        persona.ciPersona
-      ]);
-      await connection.end();
-    } catch (error) {
-      console.error("Error al crear persona: ", error);
-    }
-  }
-
-  async seleccionarPersonaPorId(idPersona: number): Promise<Persona | null> {
-    try {
-      const connection: mysql.Connection = await mysql.createConnection(this.config);
-      const querySql: string = `
-      SELECT id, nombre, apellido_paterno, apellido_materno 
-      FROM persona WHERE id = ?`;
-      const [filas]: any[] = await connection.execute(querySql, [idPersona]);
-      
-      await connection.end();
-
-      if (filas.length > 0) {
-        const [fila] = filas;
-        return new Persona(
-          fila.id,
-          fila.nombre,
-          fila.apellido_paterno,
-          fila.apellido_materno,
-          fila.ci
-        );
-      } else {
-        return null;
-      }
-    } catch (error) {
-      console.error("Error al seleccionar persona:", error);
-      return null;
-    }
-  }*/
 
   async actualizarDatoPersona(
     idPersona: number,
@@ -98,7 +49,7 @@ export class PersonaDBContext {
         apellidoPaterno,
         apellidoMaterno,
         idPersona,
-        ciPersona
+        ciPersona,
       ]);
       await connection.end();
     } catch (error) {
@@ -106,10 +57,11 @@ export class PersonaDBContext {
     }
   }
 
-  /* Clever */
   async crearPersona(persona: Persona): Promise<number | null> {
     try {
-      const connection: mysql.Connection = await mysql.createConnection(this.config);
+      const connection: mysql.Connection = await mysql.createConnection(
+        this.config
+      );
       const querySql: string = `
       INSERT INTO persona (nombre, apellido_paterno, apellido_materno,ci)
       VALUES (?, ? ,?,?)`;
@@ -117,7 +69,7 @@ export class PersonaDBContext {
         persona.nombre,
         persona.apellidoPaterno,
         persona.apellidoMaterno,
-        persona.ciPersona
+        persona.ciPersona,
       ]);
       await connection.end();
       return result.insertId;
@@ -126,22 +78,33 @@ export class PersonaDBContext {
       return null;
     }
   }
-  async seleccionarPersonaPorCliente(): Promise<{ id: number, nombre: string, apellido_paterno: string, apellido_materno: string, ci:string}[]> {
+
+  async seleccionarPersonaPorCliente(): Promise<
+    {
+      id: number;
+      nombre: string;
+      apellido_paterno: string;
+      apellido_materno: string;
+      ci: string;
+    }[]
+  > {
     try {
-      const connection: mysql.Connection = await mysql.createConnection(this.config);
+      const connection: mysql.Connection = await mysql.createConnection(
+        this.config
+      );
       const querySql: string = `
       select p.id, p.nombre, p.apellido_paterno , p.apellido_materno , p.ci
       FROM persona p
       JOIN cliente c on p.id = c.id`;
       const [rows]: any[] = await connection.execute(querySql);
       await connection.end();
-  
-      return rows.map(row => ({
+
+      return rows.map((row) => ({
         id: row.id,
         nombre: row.nombre,
         apellido_paterno: row.apellido_paterno,
         apellido_materno: row.apellido_materno,
-        ci: row.ci
+        ci: row.ci,
       }));
     } catch (error) {
       console.error("Error al seleccionar impresiones con valor: ", error);
@@ -154,7 +117,8 @@ export class PersonaDBContext {
     nombre: string,
     apellidoPaterno: string,
     apellidoMaterno: string,
-    ciPersona: string): Promise<void> {
+    ciPersona: string
+  ): Promise<void> {
     const connection = await mysql.createConnection(this.config);
     try {
       await connection.beginTransaction();
@@ -168,7 +132,7 @@ export class PersonaDBContext {
         apellidoPaterno,
         apellidoMaterno,
         ciPersona,
-        id
+        id,
       ]);
       await connection.commit();
     } catch (error) {
@@ -179,23 +143,35 @@ export class PersonaDBContext {
       await connection.end();
     }
   }
-  
-  async obtenerPersonaPorId(idPersona: number): Promise<{ id: number, nombre: string, apellido_paterno: string, apellido_materno: string , ciPersona: string }[]> {
+
+  async obtenerPersonaPorId(
+    idPersona: number
+  ): Promise<
+    {
+      id: number;
+      nombre: string;
+      apellido_paterno: string;
+      apellido_materno: string;
+      ciPersona: string;
+    }[]
+  > {
     try {
-      const connection: mysql.Connection = await mysql.createConnection(this.config);
+      const connection: mysql.Connection = await mysql.createConnection(
+        this.config
+      );
       const querySql: string = `
         SELECT id, nombre, apellido_paterno, apellido_materno , ci
         FROM persona 
         WHERE id = ?`;
-        const [rows]: any[] = await connection.execute(querySql,[idPersona]);
+      const [rows]: any[] = await connection.execute(querySql, [idPersona]);
       await connection.end();
-  
-      return rows.map(row => ({
+
+      return rows.map((row) => ({
         id: row.id,
         nombre: row.nombre,
         apellido_paterno: row.apellido_paterno,
         apellido_materno: row.apellido_materno,
-        ciPersona: row.ci
+        ciPersona: row.ci,
       }));
     } catch (error) {
       console.error("Error al seleccionar impresiones con valor: ", error);
@@ -205,31 +181,32 @@ export class PersonaDBContext {
 
   async seleccionarPersonaPorId(id: number): Promise<Persona> {
     try {
-      const connection: mysql.Connection = await mysql.createConnection(this.config);
+      const connection: mysql.Connection = await mysql.createConnection(
+        this.config
+      );
       const querySql: string = `
         SELECT id, nombre, apellido_paterno, apellido_materno, ci
         FROM persona 
         WHERE id = ?`;
-        const [filas]: any = await connection.execute(querySql, [id]);
-      
-        await connection.end();
-  
-        if (filas.length > 0) {
-          const fila = filas[0];
-          return new Persona(
-            fila.id,
-            fila.nombre,
-            fila.apellido_paterno,
-            fila.apellido_materno,
-            "0"
-          );
-        } else {
-          return null;
-        }
-      } catch (error) {
-        console.error("Error al seleccionar precio:", error);
+      const [filas]: any = await connection.execute(querySql, [id]);
+
+      await connection.end();
+
+      if (filas.length > 0) {
+        const fila = filas[0];
+        return new Persona(
+          fila.id,
+          fila.nombre,
+          fila.apellido_paterno,
+          fila.apellido_materno,
+          "0"
+        );
+      } else {
         return null;
       }
+    } catch (error) {
+      console.error("Error al seleccionar precio:", error);
+      return null;
+    }
   }
-
 }

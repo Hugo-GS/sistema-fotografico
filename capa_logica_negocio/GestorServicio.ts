@@ -13,11 +13,15 @@ export class GestorServicio {
   }
 
   async crearServicio(concepto: string, valor: number): Promise<void> {
-    const nuevoServicio = new Servicio(0,concepto, valor);
+    const nuevoServicio = new Servicio(0, concepto, valor);
     await this.servicioDBContext.crearServicio(nuevoServicio);
   }
 
-  async actualizarServicio(id: number, concepto: string, valor: number): Promise<void> {
+  async actualizarServicio(
+    id: number,
+    concepto: string,
+    valor: number
+  ): Promise<void> {
     await this.servicioDBContext.actualizarDatoServicio(id, concepto, valor);
   }
 }

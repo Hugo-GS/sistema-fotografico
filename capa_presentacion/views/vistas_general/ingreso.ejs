@@ -36,7 +36,7 @@
       /*INPUT TEXT STYLE*/
       .input-container {
         position: relative;
-        margin-top: 15px;
+        margin-top: 25px;
         width: 200px;
       }
 
@@ -249,13 +249,12 @@
           border-radius: 50%;
         }
       }
-      #message{
+      #message {
         color: red;
         padding: 5px;
-        
       }
 
-      .message-warning{
+      .message-warning {
         border: 1px solid red;
         border-radius: 5px;
       }
@@ -282,13 +281,13 @@
     <div class="container-login">
       <div class="background1"></div>
 
-      <form  id="form-login" class="form-login">
+      <form id="form-login" class="form-login">
         <div class="logo-login">
           <img src="images/logo.png" alt="" srcset="" width="100px" />
           <span>FOTO ESTUDIO MASTER</span>
         </div>
-          
-          <span id="message"></span>
+
+        <span id="message"></span>
 
         <span class="title-form-login">Ingreso al sistema</span>
         <div>
@@ -303,7 +302,7 @@
           </div>
           <div class="input-container">
             <input
-              type="`password"
+              type="password"
               class="input"
               id="contraUsuario"
               placeholder=""
@@ -318,34 +317,38 @@
       const formLogin = document.getElementById("form-login");
       formLogin.addEventListener("submit", (e) => {
         e.preventDefault();
-      })
+      });
 
-      btnIngreso.addEventListener("click", () => {
-        
+      btnIngreso.addEventListener("click", async () => {
         const nombreUsuario = document.getElementById("nombreUsuario").value;
         const contraUsuario = document.getElementById("contraUsuario").value;
-        const data = {
-          nombreUsuario,
-          contraUsuario,
-        };
 
-          fetch("/ingreso", {
+        if (!nombreUsuario || !contraUsuario) {
+          document.getElementById("message").innerText =
+            "Complete todos los campos";
+          document.getElementById("message").classList.add("message-warning");
+          return;
+        }
+
+        try {
+          const res = await fetch("/ingreso", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              let txtMensaje = document.getElementById('message');
-              txtMensaje.innerText = data.mensaje;
-              txtMensaje.classList.add("message-warning")
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-        });
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nombreUsuario, contraUsuario }),
+          });
+
+          const data = await res.json();
+          if (data.success) {
+            window.location.href = data.redireccion;
+          } else {
+            document.getElementById("message").innerText = data.mensaje;
+            document.getElementById("message").classList.add("message-warning");
+          }
+        } catch (error) {
+          document.getElementById("message").innerText = "Error de conexión";
+          document.getElementById("message").classList.add("message-warning");
+        }
+      });
     </script>
   </body>
 </html>

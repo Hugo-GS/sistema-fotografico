@@ -2,229 +2,263 @@ import * as mysql from "mysql2/promise";
 import * as fs from "fs";
 import * as path from "path";
 
-// Interfaces
 interface DatabaseConfig {
-    host: string;
-    user: string;
-    password: string;
-    port: number;
+  host: string;
+  user: string;
+  password: string;
+  port: number;
 }
 
 interface ConnectionConfig extends DatabaseConfig {
-    database?: string;
-    multipleStatements: boolean;
-    supportBigNumbers: boolean;
-    bigNumberStrings: boolean;
+  database?: string;
+  multipleStatements: boolean;
+  supportBigNumbers: boolean;
+  bigNumberStrings: boolean;
 }
 
 class DatabaseInit {
-    private config: DatabaseConfig;
-    private dbName: string = 'sisventafoto';
-    private sqlFilePath: string;
-    private backupPath: string = '/home/user/sistema-fotografico/backups_database';
+  private config: DatabaseConfig;
+  private dbName: string = "sisventafoto";
+  private sqlFilePath: string;
 
-    constructor() {
-        this.config = {
-            host: 'localhost',
-            user: 'root',
-            password: '',
-            port: 3306,
-        };
-        this.sqlFilePath = path.join(__dirname, 'sisventafoto_structure.sql');
-        console.log('Ruta del archivo SQL:', this.sqlFilePath);
+  constructor() {
+    this.config = {
+      host: "localhost",
+      user: "root",
+      password: "",
+      port: 3306,
+    };
+    this.sqlFilePath = path.join(__dirname, "sisventafoto_structure.sql");
+    console.log("Ruta del archivo SQL:", this.sqlFilePath);
+  }
+
+  private async createConnection(
+    config: ConnectionConfig
+  ): Promise<mysql.Connection> {
+    try {
+      return await mysql.createConnection(config);
+    } catch (error) {
+      console.error("Error creating connection:", error);
+      throw error;
     }
+  }
 
-    private async createConnection(config: ConnectionConfig): Promise<mysql.Connection> {
-        try {
-            return await mysql.createConnection(config);
-        } catch (error) {
-            console.error("Error creating connection:", error);
-            throw error;
+  private async verificarConexion(): Promise<void> {
+    let connection: mysql.Connection | null = null;
+    try {
+      connection = await this.createConnection({
+        ...this.config,
+        multipleStatements: true,
+        supportBigNumbers: true,
+        bigNumberStrings: true,
+      });
+      console.log("Conexión a MySQL establecida correctamente");
+    } catch (error) {
+      console.error("Error al conectar a MySQL:", error);
+      throw error;
+    } finally {
+      if (connection) await connection.end();
+    }
+  }
+
+  private async ejecutarArchivo(filePath: string): Promise<void> {
+    try {
+      if (!fs.existsSync(filePath)) {
+        console.warn(`El archivo ${filePath} no existe, saltando...`);
+        return;
+      }
+
+      const sqlContent = fs.readFileSync(filePath, "utf8");
+      let connection: mysql.Connection | null = null;
+
+      try {
+        connection = await this.createConnection({
+          ...this.config,
+          database: this.dbName,
+          multipleStatements: true,
+          supportBigNumbers: true,
+          bigNumberStrings: true,
+        });
+
+        console.log(`Ejecutando archivo: ${path.basename(filePath)}`);
+        await connection.query(sqlContent);
+        console.log(
+          `Archivo ${path.basename(filePath)} ejecutado correctamente`
+        );
+      } finally {
+        if (connection) await connection.end();
+      }
+    } catch (error) {
+      console.error(`Error ejecutando archivo ${filePath}:`, error);
+      throw error;
+    }
+  }
+
+  private async verificarProcedimiento(
+    nombreProcedimiento: string
+  ): Promise<boolean> {
+    let connection: mysql.Connection | null = null;
+    try {
+      connection = await this.createConnection({
+        ...this.config,
+        database: this.dbName,
+        multipleStatements: true,
+        supportBigNumbers: true,
+        bigNumberStrings: true,
+      });
+
+      const [rows]: any = await connection.query(
+        `
+                SELECT COUNT(*) as count 
+                FROM information_schema.routines 
+                WHERE routine_schema = ? 
+                AND routine_name = ?
+                AND routine_type = 'PROCEDURE'
+            `,
+        [this.dbName, nombreProcedimiento]
+      );
+
+      return rows[0].count > 0;
+    } catch (error) {
+      console.error(
+        `Error verificando procedimiento ${nombreProcedimiento}:`,
+        error
+      );
+      return false;
+    } finally {
+      if (connection) await connection.end();
+    }
+  }
+
+  private async ejecutarProcedimientos(): Promise<void> {
+    let connection: mysql.Connection | null = null;
+    try {
+      connection = await this.createConnection({
+        ...this.config,
+        database: this.dbName,
+        multipleStatements: true,
+        supportBigNumbers: true,
+        bigNumberStrings: true,
+      });
+
+      // Lista de procedimientos a verificar
+      const procedimientos = [
+        "ObtenerVentasPorAño",
+        "ObtenerVentasPorMes",
+        "ObtenerVentasPorRangoAños",
+        "ObtenerVentasPorRangoMeses",
+      ];
+
+      // Verificar cada procedimiento
+      for (const proc of procedimientos) {
+        const exists = await this.verificarProcedimiento(proc);
+        if (!exists) {
+          console.log(`El procedimiento ${proc} no existe. Creando...`);
+        } else {
+          console.log(`El procedimiento ${proc} ya existe. Actualizando...`);
+          // Eliminar el procedimiento existente
+          await connection.query(`DROP PROCEDURE IF EXISTS ${proc}`);
         }
+      }
+
+      // Cambiar configuración para permitir crear procedures
+      await connection.query("SET GLOBAL log_bin_trust_function_creators = 1;");
+
+      const proceduresPath = path.join(
+        __dirname,
+        "sisventafoto_procedures.sql"
+      );
+      if (!fs.existsSync(proceduresPath)) {
+        throw new Error(
+          `Archivo de procedimientos no encontrado en: ${proceduresPath}`
+        );
+      }
+
+      const sqlContent = fs.readFileSync(proceduresPath, "utf8");
+
+      console.log("Ejecutando procedimientos almacenados...");
+      await connection.query(sqlContent);
+      console.log("Procedimientos almacenados ejecutados correctamente");
+    } catch (error) {
+      console.error("Error al ejecutar procedimientos:", error);
+      throw error;
+    } finally {
+      if (connection) await connection.end();
     }
+  }
 
-    private async verificarConexion(): Promise<void> {
-        let connection: mysql.Connection | null = null;
-        try {
-            connection = await this.createConnection({
-                ...this.config,
-                multipleStatements: true,
-                supportBigNumbers: true,
-                bigNumberStrings: true
-            });
-            console.log("Conexión a MySQL establecida correctamente");
-        } catch (error) {
-            console.error("Error al conectar a MySQL:", error);
-            throw error;
-        } finally {
-            if (connection) await connection.end();
-        }
+  private async ejecutarEstructuraInicial(): Promise<void> {
+    let connection: mysql.Connection | null = null;
+    try {
+      connection = await this.createConnection({
+        ...this.config,
+        multipleStatements: true,
+        supportBigNumbers: true,
+        bigNumberStrings: true,
+      });
+
+      const sqlContent = fs.readFileSync(this.sqlFilePath, "utf8");
+      console.log("Ejecutando estructura inicial...");
+      await connection.query(sqlContent);
+      console.log("Estructura inicial ejecutada correctamente");
+    } catch (error) {
+      console.error("Error al ejecutar estructura inicial:", error);
+      throw error;
+    } finally {
+      if (connection) await connection.end();
     }
+  }
 
-    private async verificarBaseDatos(): Promise<boolean> {
-        let connection: mysql.Connection | null = null;
-        try {
-            connection = await this.createConnection({
-                ...this.config,
-                multipleStatements: true,
-                supportBigNumbers: true,
-                bigNumberStrings: true
-            });
-            const [result]: any[] = await connection.query(
-                `SHOW DATABASES LIKE '${this.dbName}'`
-            );
-            return result.length > 0;
-        } catch (error) {
-            console.error("Error al verificar la base de datos:", error);
-            throw error;
-        } finally {
-            if (connection) await connection.end();
-        }
+  private async habilitarEventScheduler(): Promise<void> {
+    let connection: mysql.Connection | null = null;
+    try {
+      connection = await this.createConnection({
+        ...this.config,
+        database: this.dbName,
+        multipleStatements: true,
+        supportBigNumbers: true,
+        bigNumberStrings: true,
+      });
+      await connection.query("SET GLOBAL event_scheduler = ON");
+      console.log("Event Scheduler habilitado");
+    } catch (error) {
+      console.warn("No se pudo habilitar el Event Scheduler:", error);
+    } finally {
+      if (connection) await connection.end();
     }
+  }
 
-    private async crearBaseDatos(): Promise<void> {
-        let connection: mysql.Connection | null = null;
-        try {
-            connection = await this.createConnection({
-                ...this.config,
-                multipleStatements: true,
-                supportBigNumbers: true,
-                bigNumberStrings: true
-            });
-            await connection.query(`CREATE DATABASE IF NOT EXISTS ${this.dbName}`);
-            console.log(`Base de datos ${this.dbName} creada correctamente`);
-        } catch (error) {
-            console.error("Error al crear la base de datos:", error);
-            throw error;
-        } finally {
-            if (connection) await connection.end();
-        }
+  async inicializarBaseDatos(): Promise<void> {
+    try {
+      console.log("Iniciando proceso de inicialización...");
+
+      await this.verificarConexion();
+
+      await this.ejecutarEstructuraInicial();
+
+      await this.ejecutarProcedimientos();
+
+      await this.habilitarEventScheduler();
+
+      console.log("Proceso de inicialización completado correctamente");
+    } catch (error) {
+      console.error("Error en el proceso de inicialización:", error);
+      throw error;
     }
-
-    private async leerArchivoSQL(): Promise<string> {
-        try {
-            if (!fs.existsSync(this.sqlFilePath)) {
-                throw new Error(`El archivo SQL no existe en la ruta: ${this.sqlFilePath}`);
-            }
-            const contenido = fs.readFileSync(this.sqlFilePath, 'utf8');
-            console.log('Archivo SQL encontrado y leído correctamente');
-            return contenido;
-        } catch (error) {
-            console.error("Error al leer el archivo SQL:", error);
-            throw error;
-        }
-    }
-
-    private async ejecutarScript(sqlContent: string): Promise<void> {
-        let connection: mysql.Connection | null = null;
-        try {
-            connection = await this.createConnection({
-                ...this.config,
-                database: this.dbName,
-                multipleStatements: true,
-                supportBigNumbers: true,
-                bigNumberStrings: true
-            });
-
-            const statements = this.prepararStatements(sqlContent);
-
-            console.log("Ejecutando script SQL...");
-            
-            for (const statement of statements) {
-                try {
-                    if (this.esStatementValido(statement)) {
-                        await connection.query(statement);
-                        console.log(`Statement ejecutado: ${statement.slice(0, 50)}...`);
-                    }
-                } catch (error) {
-                    console.warn(`Advertencia en statement: ${statement.slice(0, 100)}...`, error);
-                }
-            }
-
-            await connection.query('SET GLOBAL event_scheduler = ON');
-
-            console.log("Script SQL ejecutado correctamente");
-        } catch (error) {
-            console.error("Error al ejecutar script SQL:", error);
-            throw error;
-        } finally {
-            if (connection) await connection.end();
-        }
-    }
-
-    private prepararStatements(sqlContent: string): string[] {
-        return sqlContent
-            .split(';')
-            .map(statement => statement.trim())
-            .filter(statement => statement.length > 0);
-    }
-
-    private esStatementValido(statement: string): boolean {
-        const upperStatement = statement.toUpperCase();
-        return !upperStatement.includes('DELIMITER') && 
-               !upperStatement.includes('SYSTEM') &&
-               statement.length > 0;
-    }
-
-    private async crearDirectorioBackups(): Promise<void> {
-        try {
-            if (!fs.existsSync(this.backupPath)) {
-                fs.mkdirSync(this.backupPath, { recursive: true });
-                console.log('Directorio de backups creado correctamente');
-            }
-        } catch (error) {
-            console.warn('Advertencia al crear directorio de backups:', error);
-        }
-    }
-
-    async inicializarBaseDatos(): Promise<void> {
-        try {
-            console.log('Iniciando proceso de inicialización...');
-            
-            await this.verificarConexion();
-            const existeDB = await this.verificarBaseDatos();
-            
-            if (!existeDB) {
-                console.log(`La base de datos ${this.dbName} no existe. Creando...`);
-                await this.crearBaseDatos();
-            } else {
-                console.log(`La base de datos ${this.dbName} ya existe`);
-            }
-    
-            const sqlContent = await this.leerArchivoSQL();
-            await this.ejecutarScript(sqlContent);
-    
-            const triggersContent = await fs.readFileSync(
-                path.join(__dirname, 'sisventafoto_triggers.sql'), 
-                'utf8'
-            );
-            await this.ejecutarScript(triggersContent);
-    
-            const proceduresContent = await fs.readFileSync(
-                path.join(__dirname, 'sisventafoto_procedures.sql'), 
-                'utf8'
-            );
-            await this.ejecutarScript(proceduresContent);
-            
-            console.log("Proceso de inicialización completado correctamente");
-        } catch (error) {
-            console.error("Error en el proceso de inicialización:", error);
-            throw error;
-        }
-    }
+  }
 }
 
 async function main() {
-    const dbInit = new DatabaseInit();
-    
-    try {
-        await dbInit.inicializarBaseDatos();
-        console.log("Inicialización completada exitosamente");
-        process.exit(0);
-    } catch (error) {
-        console.error("Error en el proceso de inicialización:", error);
-        process.exit(1);
-    }
+  const dbInit = new DatabaseInit();
+
+  try {
+    await dbInit.inicializarBaseDatos();
+    console.log("Inicialización completada exitosamente");
+    process.exit(0);
+  } catch (error) {
+    console.error("Error en el proceso de inicialización:", error);
+    process.exit(1);
+  }
 }
 
 main();

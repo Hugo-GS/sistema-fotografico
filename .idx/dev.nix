@@ -39,6 +39,7 @@
         init-db = "ts-node capa_acceso_datos/database/DatabaseInit.ts";
       };
     };
+
     previews = {
       enable = true;
       previews = {

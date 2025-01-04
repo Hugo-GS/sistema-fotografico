@@ -1,64 +1,68 @@
 import { configuracion } from "./configuracion_global";
 import * as mysql from "mysql2/promise";
 
-
 export class Foto {
-    id: number;
-    imagen_bin: string;
-    descripcion: string;
-    fecha_hr: string;
-    estado: string;
-    id_cliente: number;
-    constructor(
-      id: number,
-      imagen_bin: string,
-      descripcion: string,
-      fecha_hr: string,
-      estado: string,
-      id_cliente: number
-    ) {
-      this.id = id;
-      this.imagen_bin = imagen_bin;
-      this.descripcion = descripcion;
-      this.fecha_hr = fecha_hr;
-      this.estado = estado;
-      this.id_cliente = id_cliente;
-    }
+  id: number;
+  imagen_bin: string;
+  descripcion: string;
+  fecha_hr: string;
+  estado: string;
+  id_cliente: number;
+  constructor(
+    id: number,
+    imagen_bin: string,
+    descripcion: string,
+    fecha_hr: string,
+    estado: string,
+    id_cliente: number
+  ) {
+    this.id = id;
+    this.imagen_bin = imagen_bin;
+    this.descripcion = descripcion;
+    this.fecha_hr = fecha_hr;
+    this.estado = estado;
+    this.id_cliente = id_cliente;
+  }
 }
 
 export class FotosDBContext {
-    private config: typeof configuracion;
-    
-    constructor() {
-      this.config = configuracion;
-    }
+  private config: typeof configuracion;
 
-    async insertFoto(foto: Foto) {
-        try {
-            const connection: mysql.Connection = await mysql.createConnection(
-              this.config
-            );
-            const querySql: string = `
+  constructor() {
+    this.config = configuracion;
+  }
+
+  async insertFoto(foto: Foto) {
+    try {
+      const connection: mysql.Connection = await mysql.createConnection(
+        this.config
+      );
+      const querySql: string = `
             INSERT INTO fotos 
             (imagen_bin, descripcion, fecha_hr, estado, id_cliente)
             VALUES (?, ?, ?, ?, ?)`;
-            await connection.execute(querySql, [
-              foto.imagen_bin,
-              foto.descripcion,
-              foto.fecha_hr,
-              foto.estado,
-              foto.id_cliente
-            ]);
-            await connection.end();
-          } catch (error) {
-            console.error("Error al insertar registro en Fotos: ", error);
-          }
+      await connection.execute(querySql, [
+        foto.imagen_bin,
+        foto.descripcion,
+        foto.fecha_hr,
+        foto.estado,
+        foto.id_cliente,
+      ]);
+      await connection.end();
+    } catch (error) {
+      console.error("Error al insertar registro en Fotos: ", error);
     }
+  }
 
-    async seleccionarFotosPorCiCliente(ciCliente: number, fecha: Date | null = null): Promise<Foto[]> {
-      try {
-        const connection: mysql.Connection = await mysql.createConnection(this.config);
-        let querySql: string = `
+  async seleccionarFotosPorCiCliente(
+    ciCliente: number,
+    fecha: Date | null = null
+  ): Promise<Foto[]> {
+    try {
+      const connection: mysql.Connection = await mysql.createConnection(
+        this.config
+      );
+      let querySql: string = `
         SELECT  
           fotos.id, 
           fotos.imagen_bin,
@@ -73,18 +77,19 @@ export class FotosDBContext {
         AND persona.ci = ?
         AND fotos.estado = 'A'
         AND fotos.imagen_bin IS NOT NULL `;
-  
-        const params: any[] = [ciCliente];
-        
-        if (fecha!=null) {
-          querySql += ` AND DATE(fotos.fecha_hr) = ?`;
-          params.push(fecha.toISOString().split('T')[0]);
-        }
 
-        const [rows]: any[] = await connection.execute(querySql, params);
+      const params: any[] = [ciCliente];
 
-        await connection.end();
-        return rows.map(row => (
+      if (fecha != null) {
+        querySql += ` AND DATE(fotos.fecha_hr) = ?`;
+        params.push(fecha.toISOString().split("T")[0]);
+      }
+
+      const [rows]: any[] = await connection.execute(querySql, params);
+
+      await connection.end();
+      return rows.map(
+        (row) =>
           new Foto(
             row.id,
             row.imagen_bin,
@@ -93,11 +98,10 @@ export class FotosDBContext {
             row.estado,
             row.id_cliente
           )
-        ));
-      } catch (error) {
-        console.error("Error al seleccionar fotos del cliente. Error:", error);
-        return [];
-      }
+      );
+    } catch (error) {
+      console.error("Error al seleccionar fotos del cliente. Error:", error);
+      return [];
     }
-  
+  }
 }

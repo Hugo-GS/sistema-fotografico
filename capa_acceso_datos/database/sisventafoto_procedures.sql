@@ -1,4 +1,3 @@
-DELIMITER //
 CREATE PROCEDURE ObtenerVentasPorAño(
     IN año_inicio INT
 )
@@ -9,7 +8,7 @@ BEGIN
     WHERE YEAR(fecha_hr) = año_inicio
     GROUP BY año
     ORDER BY año;
-END//
+END;
 
 CREATE PROCEDURE ObtenerVentasPorMes(
     IN mes_inicio INT,
@@ -24,7 +23,7 @@ BEGIN
         AND YEAR(fecha_hr) = año_inicio
     GROUP BY mes, año
     ORDER BY año, mes;
-END//
+END;
 
 CREATE PROCEDURE ObtenerVentasPorRangoAños(
     IN año_inicio INT,
@@ -37,7 +36,7 @@ BEGIN
     WHERE YEAR(fecha_hr) BETWEEN año_inicio AND año_fin
     GROUP BY año
     ORDER BY año;
-END//
+END;
 
 CREATE PROCEDURE ObtenerVentasPorRangoMeses(
     IN mes_inicio INT,
@@ -53,6 +52,4 @@ BEGIN
       AND YEAR(fecha_hr) = año_inicio
     GROUP BY mes, año
     ORDER BY año, mes;
-END//
-
-DELIMITER ;
+END;

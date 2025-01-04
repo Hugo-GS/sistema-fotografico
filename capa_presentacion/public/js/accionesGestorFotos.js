@@ -8,9 +8,13 @@ function initComponenteCargarFoto() {
   let selectedFiles = [];
 
   btnGuardarFotos.addEventListener("click", () => {
-    if(idClienteSeleccionado===null || checkSeleccion === null ||checkSeleccion.checked===false){
-        alert("No hay cliente seleccionado");
-        return;
+    if (
+      idClienteSeleccionado === null ||
+      checkSeleccion === null ||
+      checkSeleccion.checked === false
+    ) {
+      alert("No hay cliente seleccionado");
+      return;
     }
     if (selectedFiles.length > 0) {
       const confirmacion = confirm("Estas seguro de guardar estas fotos");
@@ -19,7 +23,7 @@ function initComponenteCargarFoto() {
       } else {
       }
     } else {
-        alert("No se ha cargado ninguna foto");
+      alert("No se ha cargado ninguna foto");
     }
   });
 
@@ -105,14 +109,13 @@ function initComponenteCargarFoto() {
   }
 
   function sendFileToServer(byteArray, fileName) {
-    
     fetch("/api_admin/subir_foto", {
       method: "POST",
       headers: {
         "Content-Type": "application/octet-stream",
         "X-File-Name": fileName,
         "Id-ClienteSeleccionado": idClienteSeleccionado,
-        "descripcion-foto":descripicionFotos.value,
+        "descripcion-foto": descripicionFotos.value,
       },
       body: byteArray,
     })
@@ -135,52 +138,52 @@ function initComponenteCargarFoto() {
   btnBuscarcliente.addEventListener("click", async () => {
     const ciCliente = ciClienteInput.value.trim();
     if (checkSeleccion !== null) {
-        if (checkSeleccion.checked){
-            alert("Tiene un cliente seleccionado, quite la seleccion para buscar otro cliente");
-            return;
-        }
+      if (checkSeleccion.checked) {
+        alert(
+          "Tiene un cliente seleccionado, quite la seleccion para buscar otro cliente"
+        );
+        return;
+      }
     }
     if (ciCliente) {
       try {
         const clienteData = await buscarCliente(ciCliente);
         idClienteSeleccionado = clienteData.id;
-        
+
         mostrarDatosCliente(clienteData);
         checkSeleccion = document.getElementById("checkSeleccion");
       } catch (error) {
-        console.error('Error al buscar el cliente:', error);
-        nombreCliente.textContent = 'Error al buscar el cliente';
-        apellidosCliente.textContent = '';
+        console.error("Error al buscar el cliente:", error);
+        nombreCliente.textContent = "Error al buscar el cliente";
+        apellidosCliente.textContent = "";
       }
     } else {
-      alert('Por favor, ingresa un CI válido.');
+      alert("Por favor, ingresa un CI válido.");
     }
   });
 
-
-
   function mostrarDatosCliente(clienteData) {
     nombreCliente.textContent = clienteData.nombre;
-    apellidosCliente.textContent = clienteData.apellidoPaterno + clienteData.apellidoMaterno;
+    apellidosCliente.textContent =
+      clienteData.apellidoPaterno + clienteData.apellidoMaterno;
     accionCliente.innerHTML = `
     <input type="checkbox" id="checkSeleccion" name="idCliente" value="${clienteData.id}">
     <label for="idCliente">Seleccionar</label>
     `;
   }
-
 }
 
 async function buscarCliente(ciCliente) {
-  const response = await fetch('/api_admin/buscar_cliente', {
-    method: 'POST',
+  const response = await fetch("/api_admin/buscar_cliente", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ ci: ciCliente })
+    body: JSON.stringify({ ci: ciCliente }),
   });
 
   if (!response.ok) {
-    throw new Error('Error en la respuesta del servidor');
+    throw new Error("Error en la respuesta del servidor");
   }
 
   const data = await response.json();
@@ -188,28 +191,28 @@ async function buscarCliente(ciCliente) {
 }
 
 async function obtenerFotosCliente(ciCliente, fecha = null) {
-  const url = new URL(`/api_admin/fotosCliente/${ciCliente}`, window.location.origin);
+  const url = new URL(
+    `/api_admin/fotosCliente/${ciCliente}`,
+    window.location.origin
+  );
   if (fecha) {
-    url.searchParams.append('fecha', fecha);
+    url.searchParams.append("fecha", fecha);
   }
 
   const response = await fetch(url.toString(), {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   });
 
   if (!response.ok) {
-    throw new Error('Error en la respuesta del servidor');
+    throw new Error("Error en la respuesta del servidor");
   }
 
   const data = await response.json();
   return data;
 }
-
-
-
 
 function initComponenteBuscadorFotos() {
   const btnBuscarCliente = document.getElementById("btnBuscarCliente");
@@ -230,7 +233,6 @@ function initComponenteBuscadorFotos() {
     const query = searchCliente.value;
     const clienteData = await buscarCliente(query);
     mostrarDatosCliente(clienteData);
-    
   });
 
   function mostrarDatosCliente(clienteData) {
@@ -243,20 +245,26 @@ function initComponenteBuscadorFotos() {
         <i class='bx bx-user-check'></i>
       </button>
       </li>`;
-    
-      document.getElementById('btnSeleccionarCliente').addEventListener("click", () => {
-        seleccionarClienteBusquedaFoto(`${clienteData.nombre} ${clienteData.apellidoPaterno} ${clienteData.apellidoMaterno}`, clienteData.id);
+
+    document
+      .getElementById("btnSeleccionarCliente")
+      .addEventListener("click", () => {
+        seleccionarClienteBusquedaFoto(
+          `${clienteData.nombre} ${clienteData.apellidoPaterno} ${clienteData.apellidoMaterno}`,
+          clienteData.id
+        );
       });
   }
 
-
   function mostrarFotos(fotos) {
-    const tbody = photoTable.querySelector('tbody');
-    tbody.innerHTML = '';
-    
-    fotos.forEach(foto => {
-      const row = document.createElement('tr');
-      const imagenBin = foto.imagen_bin ? `data:image/png;base64,${foto.imagen_bin}` : '';
+    const tbody = photoTable.querySelector("tbody");
+    tbody.innerHTML = "";
+
+    fotos.forEach((foto) => {
+      const row = document.createElement("tr");
+      const imagenBin = foto.imagen_bin
+        ? `data:image/png;base64,${foto.imagen_bin}`
+        : "";
       row.innerHTML = `
         <td>${foto.id}</td>
         <td>${foto.descripcion}</td>
@@ -272,7 +280,6 @@ function initComponenteBuscadorFotos() {
       tbody.appendChild(row);
     });
   }
-  
 
   function seleccionarClienteBusquedaFoto(nombreCompleto, idCliente) {
     const $option = $clienteSelect.querySelector("option");
@@ -288,52 +295,59 @@ function initComponenteBuscadorFotos() {
   //---------------------------------------------
   btnBuscarFotos.addEventListener("click", async () => {
     if (ciClienteSeleccionado) {
-      if (fechaInput.value != ""){
-        const fotos = await obtenerFotosCliente(ciClienteSeleccionado,fechaInput.value);
+      if (fechaInput.value != "") {
+        const fotos = await obtenerFotosCliente(
+          ciClienteSeleccionado,
+          fechaInput.value
+        );
         mostrarFotos(fotos);
-      }else{
+      } else {
         const fotos = await obtenerFotosCliente(ciClienteSeleccionado);
         mostrarFotos(fotos);
       }
     } else {
-      alert('Selecciona un cliente primero.');
+      alert("Selecciona un cliente primero.");
     }
   });
-
 
   function obtenerFotosSeleccionadas() {
     const selectedIds = [];
-    const rows = document.querySelectorAll('#photoTable tbody tr');
-  
-    rows.forEach(row => {
+    const rows = document.querySelectorAll("#photoTable tbody tr");
+
+    rows.forEach((row) => {
       const checkbox = row.querySelector('input[type="checkbox"]');
       if (checkbox && checkbox.checked) {
-        const id = row.querySelector('td:first-child').textContent;
+        const id = row.querySelector("td:first-child").textContent;
         selectedIds.push(id);
       }
     });
-  
+
     return selectedIds;
   }
 
-  btnRealizarServicio.addEventListener("click", ()=>{
+  btnRealizarServicio.addEventListener("click", () => {
     const selectedIds = obtenerFotosSeleccionadas();
-    
-    if(selectedIds.length <= 0){
+
+    if (selectedIds.length <= 0) {
       alert("No se ha seleccionado ninguna foto");
-      return
+      return;
     }
+    const overlay = document.getElementById("overlay");
+    overlay.classList.add("active");
+    overlay.style.display = "block";
     const serviciosCTN = document.getElementById("serviciosCTN");
-    serviciosCTN.classList.remove("hidden-ctn")
-
+    serviciosCTN.classList.remove("hidden-ctn");
   });
-  const btnCerrarVentanaRealizarServicios = document.getElementById("btnCerrarVentanaRealizarServicios");
-  btnCerrarVentanaRealizarServicios.addEventListener("click", ()=>{
+  const btnCerrarVentanaRealizarServicios = document.getElementById(
+    "btnCerrarVentanaRealizarServicios"
+  );
+  btnCerrarVentanaRealizarServicios.addEventListener("click", () => {
     const serviciosCTN = document.getElementById("serviciosCTN");
-    serviciosCTN.classList.add("hidden-ctn")
-
+    const overlay = document.getElementById("overlay");
+    serviciosCTN.classList.add("hidden-ctn");
+    overlay.classList.remove("active");
+    overlay.style.display = "none";
   });
-
 }
 
 function seleccionarServicio(idServicio, precio) {
@@ -341,11 +355,11 @@ function seleccionarServicio(idServicio, precio) {
   serviciosCTN.classList.add("hidden-ctn");
 
   const selectedIds = obtenerFotosSeleccionadasG();
-  console.log('IDs de fotos seleccionadas:', selectedIds);
+  console.log("IDs de fotos seleccionadas:", selectedIds);
 
-  const idCliente = document.getElementById("cliente").value; 
+  const idCliente = document.getElementById("cliente").value;
   const idEncargado = 6;
-  const totalGeneral = Number(precio)*selectedIds.length;
+  const totalGeneral = Number(precio) * selectedIds.length;
 
   const payload = {
     idServicio: idServicio,
@@ -353,40 +367,38 @@ function seleccionarServicio(idServicio, precio) {
     idCliente: idCliente,
     idEncargado: idEncargado,
     totalGeneral: totalGeneral,
-    precioServicio: Number(precio)
+    precioServicio: Number(precio),
   };
 
-  fetch('/api_admin/realizarServicio', {
-    method: 'POST',
+  fetch("/api_admin/realizarServicio", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
   })
-    .then(response => {
+    .then((response) => {
       if (!response.ok) {
-        throw new Error('Error al realizar el servicio');
+        throw new Error("Error al realizar el servicio");
       }
       return response.json();
     })
-    .then(data => {
-      alert("La venta se ha realizado correctamente!")
+    .then((data) => {
+      alert("La venta se ha realizado correctamente!");
     })
-    .catch(error => {
-      console.error('Error:', error);
+    .catch((error) => {
+      console.error("Error:", error);
     });
 }
 
-
-
 function obtenerFotosSeleccionadasG() {
   const selectedIds = [];
-  const rows = document.querySelectorAll('#photoTable tbody tr');
+  const rows = document.querySelectorAll("#photoTable tbody tr");
 
-  rows.forEach(row => {
+  rows.forEach((row) => {
     const checkbox = row.querySelector('input[type="checkbox"]');
     if (checkbox && checkbox.checked) {
-      const id = row.querySelector('td:first-child').textContent;
+      const id = row.querySelector("td:first-child").textContent;
       selectedIds.push(id);
     }
   });

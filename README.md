@@ -52,15 +52,9 @@ cd sistema-fotografico
 npm ci
 ```
 
-3. Configura las variables de entorno:
+3. Configura la base de datos:
 ```bash
-cp .env.example .env
-# Edita el archivo .env con tus configuraciones
-```
-
-4. Configura la base de datos:
-```bash
-# Ejecuta los scripts SQL ubicados en la carpeta database
+npm run db:init
 ```
 
 ## Credenciales de Prueba
@@ -93,11 +87,6 @@ npm start
 ```
 
 El servidor estará disponible en `http://localhost:3000`
-
-## Despliegue y Desarrollo con Google IDX
-
-> 💡 **¿Qué es IDX?**  
-> IDX es un entorno de desarrollo basado en la nube que te permite comenzar a codificar instantáneamente sin configuración local.
 
 ## Estructura del Proyecto
 ```
@@ -146,6 +135,9 @@ sistema-fotografico/
 ISC - Ver el archivo [LICENSE](LICENSE) para más detalles.
 
 ## Contacto
-[Tu Nombre] - [@tu_twitter](https://twitter.com/tu_twitter) - email@example.com
-
 Link del proyecto: [https://github.com/Hugo-GS/sistema-fotografico](https://github.com/Hugo-GS/sistema-fotografico)
+
+## Despliegue y Desarrollo con Google IDX
+
+> 💡 **¿Qué es IDX?**  
+> IDX es un entorno de desarrollo basado en la nube que te permite comenzar a codificar instantáneamente sin configuración local.

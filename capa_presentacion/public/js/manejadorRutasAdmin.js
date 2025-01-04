@@ -8,23 +8,29 @@ window.addEventListener("hashchange", function () {
   loadHTML();
 });
 
-const subsidebarGestorfotos = document.getElementById("sub_sidebar_gestor_fotos");
-const subsidebarGestorServicio = document.getElementById("sub_sidebar_gestor_servicio");
-const subsidebarGestorCliente = document.getElementById("sub_sidebar_gestor_clientes");
-
+const subsidebarGestorfotos = document.getElementById(
+  "sub_sidebar_gestor_fotos"
+);
+const subsidebarGestorServicio = document.getElementById(
+  "sub_sidebar_gestor_servicio"
+);
+const subsidebarGestorCliente = document.getElementById(
+  "sub_sidebar_gestor_clientes"
+);
 
 function activarDesactivarSubSidebar(documentSubsidebar, estado) {
-  if(estado==="activar"){
+  if (estado === "activar") {
     documentSubsidebar.classList.remove("no-active");
     documentSubsidebar.classList.add("active");
   }
-  if(estado==="desactivar"){
+  if (estado === "desactivar") {
     if (documentSubsidebar.classList.contains("active")) {
       documentSubsidebar.classList.remove("active");
       documentSubsidebar.classList.add("no-active");
     }
   }
 }
+
 function desactivarSubSidebars() {
   subsidebarGestorfotos.classList.remove("active");
   subsidebarGestorfotos.classList.add("no-active");
@@ -51,7 +57,9 @@ async function loadPage(href) {
 async function loadHTML() {
   let hash = window.location.hash;
   if (rutasPagina[hash].contentHTML === null) {
-    rutasPagina[hash].contentHTML = await loadPage(rutasPagina[hash].serverRoute);
+    rutasPagina[hash].contentHTML = await loadPage(
+      rutasPagina[hash].serverRoute
+    );
   }
   pageContent.innerHTML = rutasPagina[hash].contentHTML;
   rutasPagina[hash].initComponent();
@@ -59,18 +67,19 @@ async function loadHTML() {
 
 const rutasPagina = {
   "#/PanelPrincipal": {
-    contentHTML:null,
-    serverRoute:"/view_panel_principal",
-    initComponent: () => {
-      desactivarSubSidebars()
-    }
-  },
-  "#/GestorFotos": {
-    contentHTML:null,
-    serverRoute:"/view_panel_principal",
+    contentHTML: null,
+    serverRoute: "/view_panel_principal",
     initComponent: () => {
       desactivarSubSidebars();
-      activarDesactivarSubSidebar(subsidebarGestorfotos, "activar");}
+    },
+  },
+  "#/GestorFotos": {
+    contentHTML: null,
+    serverRoute: "/view_panel_principal",
+    initComponent: () => {
+      desactivarSubSidebars();
+      activarDesactivarSubSidebar(subsidebarGestorfotos, "activar");
+    },
   },
   "#/GestorFotos/buscador_fotos": {
     contentHTML: null,
@@ -85,16 +94,15 @@ const rutasPagina = {
   "#/GestorServicios": {
     contentHTML: null,
     serverRoute: "/view_panel_principal",
-    initComponent:() => {
+    initComponent: () => {
       desactivarSubSidebars();
-      activarDesactivarSubSidebar(subsidebarGestorServicio, "activar")
+      activarDesactivarSubSidebar(subsidebarGestorServicio, "activar");
     },
   },
   "#/GestorServicios/registrar_servicio_fotografico": {
     contentHTML: null,
     serverRoute: "/registrar_servicio_fotografico",
-    initComponent: () => {
-    },
+    initComponent: () => {},
   },
   "#/GestorServicios/registrar_servicio": {
     contentHTML: null,
@@ -104,15 +112,14 @@ const rutasPagina = {
   "#/GestorServicios/verImpresiones": {
     contentHTML: null,
     serverRoute: "/verImpresiones",
-    initComponent: () => {
-    },
+    initComponent: () => {},
   },
   "#/GestorClientes": {
     contentHTML: null,
     serverRoute: "/view_panel_principal",
-    initComponent:() => {
+    initComponent: () => {
       desactivarSubSidebars();
-      activarDesactivarSubSidebar(subsidebarGestorCliente, "activar")
+      activarDesactivarSubSidebar(subsidebarGestorCliente, "activar");
     },
   },
   "#/GestorClientes/verClientes": {
@@ -125,5 +132,4 @@ const rutasPagina = {
     serverRoute: "/registrar_cliente",
     initComponent: () => {},
   },
-
 };

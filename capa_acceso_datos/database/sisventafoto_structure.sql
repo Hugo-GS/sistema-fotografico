@@ -1,18 +1,8 @@
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-DROP DATABASE sisventafoto;
+DROP DATABASE IF EXISTS sisventafoto;
 CREATE DATABASE sisventafoto;
 USE sisventafoto;
--- db: sisventafoto
+
+-- Tablas base (sin foreign keys)
 CREATE TABLE IF NOT EXISTS persona (
     id  INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50),
@@ -26,6 +16,33 @@ CREATE TABLE IF NOT EXISTS tipousuario (
     tipo CHAR(1)
 ) ENGINE = InnoDB;
 
+CREATE TABLE IF NOT EXISTS sucursal (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50),
+    direccion VARCHAR(255)
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS impresion (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre varchar(50) not null,
+    descripciondetalleproducto VARCHAR(255) not null,
+    estado char(1) not null
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS conceptobonodescuento (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    concepto varchar(50) not null,
+    tipo char(1),
+    valor decimal(10, 2) not null
+) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS conceptoservicio (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    concepto varchar(50) not null,
+    valor decimal(10, 2) not null
+) ENGINE = InnoDB;
+
+-- Tablas con una foreign key
 CREATE TABLE IF NOT EXISTS usuario (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre_usuario VARCHAR(16),
@@ -47,6 +64,25 @@ CREATE TABLE IF NOT EXISTS encargado (
     FOREIGN KEY (id) REFERENCES persona (id)
 ) ENGINE = InnoDB;
 
+CREATE TABLE IF NOT EXISTS precio (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fecha_hr_inicio datetime not null,
+    fecha_hr_fin datetime NULL,
+    valor decimal(10, 2) not null,
+    id_impresion int not null,
+    FOREIGN KEY (id_impresion) REFERENCES impresion (id)
+) ENGINE = InnoDB;
+
+-- Tablas con múltiples foreign keys
+CREATE TABLE IF NOT EXISTS encargadosucursal (
+    id_sucursal INT,
+    id_encargado INT,
+    estado CHAR(1),
+    PRIMARY KEY (id_sucursal, id_encargado),
+    FOREIGN KEY (id_sucursal) REFERENCES sucursal (id),
+    FOREIGN KEY (id_encargado) REFERENCES encargado (id)
+) ENGINE = InnoDB;
+
 CREATE TABLE IF NOT EXISTS fotos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     imagen_bin LONGBLOB,
@@ -55,21 +91,6 @@ CREATE TABLE IF NOT EXISTS fotos (
     estado CHAR(1),
     id_cliente INT,
     FOREIGN KEY (id_cliente) REFERENCES cliente (id)
-) ENGINE = InnoDB;
-
-CREATE TABLE IF NOT EXISTS sucursal (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50),
-    direccion VARCHAR(255)
-) ENGINE = InnoDB;
-
-CREATE TABLE IF NOT EXISTS encargadosucursal (
-    id_sucursal INT,
-    id_encargado INT,
-    estado CHAR(1),
-    PRIMARY KEY (id_sucursal, id_encargado),
-    FOREIGN KEY (id_sucursal) REFERENCES sucursal (id),
-    FOREIGN KEY (id_encargado) REFERENCES encargado (id)
 ) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS venta (
@@ -91,22 +112,6 @@ CREATE TABLE IF NOT EXISTS entregatrabajo (
     FOREIGN KEY (id_venta) REFERENCES venta (id)
 ) ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS impresion (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre varchar(50) not null,
-    descripciondetalleproducto VARCHAR(255) not null,
-    estado char(1) not null
-) ENGINE = InnoDB;
-
-CREATE TABLE IF NOT EXISTS precio (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    fecha_hr_inicio datetime not null,
-    fecha_hr_fin datetime NULL,
-    valor decimal(10, 2) not null,
-    id_impresion int not null,
-    FOREIGN KEY (id_impresion) REFERENCES impresion (id)
-) ENGINE = InnoDB;
-
 CREATE TABLE IF NOT EXISTS detalleventa (
     id_venta INT,
     id_impresion INT,
@@ -120,13 +125,6 @@ CREATE TABLE IF NOT EXISTS detalleventa (
     FOREIGN KEY (id_foto) REFERENCES fotos(id)
 ) ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS conceptobonodescuento (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    concepto varchar(50) not null,
-    tipo char(1),
-    valor decimal(10, 2) not null
-) ENGINE = InnoDB;
-
 CREATE TABLE IF NOT EXISTS bonodescuento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_detalleventa_venta INT NOT NULL,
@@ -135,12 +133,6 @@ CREATE TABLE IF NOT EXISTS bonodescuento (
     FOREIGN KEY(id_detalleventa_impresion) REFERENCES detalleventa(id_impresion),
     FOREIGN KEY(id_detalleventa_venta) REFERENCES detalleventa(id_venta),
     FOREIGN KEY (id_conceptodescuento) REFERENCES conceptobonodescuento(id)
-) ENGINE = InnoDB;
-
-CREATE TABLE IF NOT EXISTS conceptoservicio (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    concepto varchar(50) not null,
-    valor decimal(10, 2) not null
 ) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS servicioagregado (
@@ -154,7 +146,7 @@ CREATE TABLE IF NOT EXISTS servicioagregado (
     FOREIGN KEY (id_conceptoservicio) REFERENCES conceptoservicio (id)
 ) ENGINE = InnoDB;
 
--- Inserciones de datos iniciales
+-- Inserciones iniciales
 INSERT INTO tipousuario (tipo) VALUES ('A');
 INSERT INTO tipousuario (tipo) VALUES ('E');
 
@@ -173,16 +165,15 @@ INSERT INTO impresion (nombre, descripciondetalleproducto, estado) VALUES ('Impr
 INSERT INTO impresion (nombre, descripciondetalleproducto, estado) VALUES ('Impresión A', 'Hoja grande 20x27 cm', 'A');
 
 -- Insertar en la tabla `conceptobonodescuento`
-INSERT INTO conceptobonodescuento (concepto, tipo, valor) VALUES ('Descuento Antiguedad Marqueteria', 'P', 10.00);-- P Porcentual
+INSERT INTO conceptobonodescuento (concepto, tipo, valor) VALUES ('Descuento Antiguedad Marqueteria', 'P', 10.00);
 
 -- Insertar en la tabla `conceptoservicio`
 INSERT INTO conceptoservicio (concepto, valor) VALUES ('Enmarcado', 10.00);
 INSERT INTO conceptoservicio (concepto, valor) VALUES ('Retoque Fotográfico', 20.00);
 INSERT INTO conceptoservicio (concepto, valor) VALUES ('Marqueteria', 50.00);
 
--- Persona - encargado
+-- Persona - encargado y admin
 INSERT INTO persona (nombre, apellido_paterno, apellido_materno) VALUES ('Encargado', '', '');
--- Persona - admin
 INSERT INTO persona (nombre, apellido_paterno, apellido_materno) VALUES ('Administrador', '', '');
 
 -- Personas - clientes
@@ -192,32 +183,14 @@ INSERT INTO persona (nombre, apellido_paterno, apellido_materno,ci) VALUES ('Car
 INSERT INTO persona (nombre, apellido_paterno, apellido_materno,ci) VALUES ('Ana', 'Rodríguez', 'Sánchez', '114');
 INSERT INTO persona (nombre, apellido_paterno, apellido_materno,ci) VALUES ('Luis', 'Hernández', 'Ruiz', '115');
 
+-- Insertar usuarios
 INSERT INTO usuario (nombre_usuario, contrasena, id_persona, id_tipousuario) VALUES ('admin', 'admin', 2, 1);
 INSERT INTO usuario (nombre_usuario, contrasena, id_persona, id_tipousuario) VALUES ('encargado', 'encargado', 1, 2);
 
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Para habilitar el Event Scheduler (necesario para los eventos)
-SET GLOBAL event_scheduler = ON;
-
--- Asegurarse que el sistema de backup funcione
--- Crear el directorio de backups si no existe
--- Nota: Asegúrate de tener los permisos adecuados
-SYSTEM mkdir -p /home/user/sistema-fotografico/backups_database;
-SYSTEM chmod 755 /home/user/sistema-fotografico/backups_database;
-
--- Nota: Verifica que los siguientes usuarios existan en cliente y encargado
+-- Asignar roles
+INSERT INTO encargado (id, telefono) VALUES (1, '123456789');
 INSERT INTO cliente (id) VALUES (3);
 INSERT INTO cliente (id) VALUES (4);
 INSERT INTO cliente (id) VALUES (5);
 INSERT INTO cliente (id) VALUES (6);
 INSERT INTO cliente (id) VALUES (7);
-
-INSERT INTO encargado (id, telefono) VALUES (1, '123456789');

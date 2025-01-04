@@ -9,7 +9,14 @@ export class Venta {
   id_encargado: number;
   id_cliente: number;
 
-  constructor(id: number, estado: string, fecha_hr: string, total_general: number, id_encargado: number, id_cliente: number) {
+  constructor(
+    id: number,
+    estado: string,
+    fecha_hr: string,
+    total_general: number,
+    id_encargado: number,
+    id_cliente: number
+  ) {
     this.id = id;
     this.estado = estado;
     this.fecha_hr = fecha_hr;
@@ -19,7 +26,6 @@ export class Venta {
   }
 }
 
-
 export class DetalleVenta {
   id_venta: number;
   id_impresion: number;
@@ -28,7 +34,14 @@ export class DetalleVenta {
   precio_servicio: number;
   id_foto: number;
 
-  constructor(id_venta: number, id_impresion: number, cantidad: number, precio_impresion: number, precio_servicio: number, id_foto: number) {
+  constructor(
+    id_venta: number,
+    id_impresion: number,
+    cantidad: number,
+    precio_impresion: number,
+    precio_servicio: number,
+    id_foto: number
+  ) {
     this.id_venta = id_venta;
     this.id_impresion = id_impresion;
     this.cantidad = cantidad;
@@ -38,50 +51,65 @@ export class DetalleVenta {
   }
 }
 
-
-
 export class Impresion {
-    id: number;
-    nombre: string;
-    descripcionDetalleProducto: string;
-    estado: string;
-  
-    constructor(id: number, nombre: string, descripcionDetalleProducto: string, estado: string) {
-      this.id = id;
-      this.nombre = nombre;
-      this.descripcionDetalleProducto = descripcionDetalleProducto;
-      this.estado = estado;
-    }
+  id: number;
+  nombre: string;
+  descripcionDetalleProducto: string;
+  estado: string;
+
+  constructor(
+    id: number,
+    nombre: string,
+    descripcionDetalleProducto: string,
+    estado: string
+  ) {
+    this.id = id;
+    this.nombre = nombre;
+    this.descripcionDetalleProducto = descripcionDetalleProducto;
+    this.estado = estado;
   }
+}
 
 export class ImpresionDBContext {
-    private config: typeof configuracion;
-    
-    constructor() {
-      this.config = configuracion;
-    }
-  
-    async crearImpresion(impresion: Impresion): Promise<number | null> {
-      try {
-        const connection: mysql.Connection = await mysql.createConnection(this.config);
-        const querySql: string = `
+  private config: typeof configuracion;
+
+  constructor() {
+    this.config = configuracion;
+  }
+
+  async crearImpresion(impresion: Impresion): Promise<number | null> {
+    try {
+      const connection: mysql.Connection = await mysql.createConnection(
+        this.config
+      );
+      const querySql: string = `
         INSERT INTO impresion (nombre, descripciondetalleproducto, estado)
         VALUES (?, ?, ?)`;
-        const [result]: any = await connection.execute(querySql, [
-          impresion.nombre,
-          impresion.descripcionDetalleProducto,
-          impresion.estado
-        ]);
-        await connection.end();
+      const [result]: any = await connection.execute(querySql, [
+        impresion.nombre,
+        impresion.descripcionDetalleProducto,
+        impresion.estado,
+      ]);
+      await connection.end();
       return result.insertId;
     } catch (error) {
       console.error("Error al crear persona: ", error);
       return null;
     }
   }
-  async seleccionarImpresionesConValor(): Promise<{ id: number, nombre: string, descripciondetalleproducto: string, estado: string, valor: number }[]> {
+  async seleccionarImpresionesConValor(): Promise<
+    {
+      id: number;
+      nombre: string;
+      descripciondetalleproducto: string;
+      estado: string;
+      valor: number;
+    }[]
+  > {
     try {
-      const connection: mysql.Connection = await mysql.createConnection(this.config);
+      const connection: mysql.Connection = await mysql.createConnection(
+        this.config
+      );
       const querySql: string = `
       SELECT i.id, i.nombre, i.descripciondetalleproducto, i.estado, p.valor
       FROM impresion i
@@ -89,8 +117,8 @@ export class ImpresionDBContext {
       Where p.fecha_hr_fin is NULL`;
       const [rows]: any[] = await connection.execute(querySql);
       await connection.end();
-  
-      return rows.map(row => ({
+
+      return rows.map((row) => ({
         id: row.id,
         nombre: row.nombre,
         descripciondetalleproducto: row.descripciondetalleproducto,
@@ -103,18 +131,30 @@ export class ImpresionDBContext {
     }
   }
 
-  async obtenerImpresionPorId(idImpresion: number): Promise<{ id: number, nombre: string, descripciondetalleproducto: string, estado: string, valor: number }[]> {
+  async obtenerImpresionPorId(
+    idImpresion: number
+  ): Promise<
+    {
+      id: number;
+      nombre: string;
+      descripciondetalleproducto: string;
+      estado: string;
+      valor: number;
+    }[]
+  > {
     try {
-      const connection: mysql.Connection = await mysql.createConnection(this.config);
+      const connection: mysql.Connection = await mysql.createConnection(
+        this.config
+      );
       const querySql: string = `
         SELECT i.id, i.nombre, i.descripciondetalleproducto, i.estado, p.valor
         FROM impresion i
         JOIN precio p ON i.id = p.id_impresion
         WHERE i.id = ? and p.fecha_hr_fin is NULL`;
-        const [rows]: any[] = await connection.execute(querySql,[idImpresion]);
+      const [rows]: any[] = await connection.execute(querySql, [idImpresion]);
       await connection.end();
-  
-      return rows.map(row => ({
+
+      return rows.map((row) => ({
         id: row.id,
         nombre: row.nombre,
         descripciondetalleproducto: row.descripciondetalleproducto,
@@ -127,7 +167,13 @@ export class ImpresionDBContext {
     }
   }
 
-  async actualizarDatosImpresion(id: number, nombre: string, descripcionDetalleProducto: string, estado: string, valor: number): Promise<void> {
+  async actualizarDatosImpresion(
+    id: number,
+    nombre: string,
+    descripcionDetalleProducto: string,
+    estado: string,
+    valor: number
+  ): Promise<void> {
     const connection = await mysql.createConnection(this.config);
     try {
       const fechaHrInicio = new Date();
@@ -145,18 +191,23 @@ export class ImpresionDBContext {
         SET fecha_hr_fin = ?
         WHERE id_impresion = ?`;
 
-
-
       const queryinsert: string = `
         INSERT INTO precio (fecha_hr_inicio, fecha_hr_fin, valor, id_impresion)
         VALUES (?, ?, ?, ?)`;
-        
 
-
-
-      await connection.execute(updateImpresionQuery, [nombre, descripcionDetalleProducto, estado, id]);
+      await connection.execute(updateImpresionQuery, [
+        nombre,
+        descripcionDetalleProducto,
+        estado,
+        id,
+      ]);
       await connection.execute(updatePrecioQuery, [fechaHrInicio, id]);
-      await connection.execute(queryinsert,[fechaHrInicio,fechaHrFin , valor , id])
+      await connection.execute(queryinsert, [
+        fechaHrInicio,
+        fechaHrFin,
+        valor,
+        id,
+      ]);
 
       await connection.commit();
     } catch (error) {
@@ -169,14 +220,16 @@ export class ImpresionDBContext {
   }
   async insertVenta(venta: Venta): Promise<number> {
     try {
-      const connection: mysql.Connection = await mysql.createConnection(this.config);
+      const connection: mysql.Connection = await mysql.createConnection(
+        this.config
+      );
       const querySql: string = `INSERT INTO venta (estado, fecha_hr, total_general, id_encargado, id_cliente) VALUES (?, ?, ?, ?, ?)`;
       const [result]: any = await connection.execute(querySql, [
         venta.estado,
         venta.fecha_hr,
         venta.total_general,
         venta.id_encargado,
-        venta.id_cliente
+        venta.id_cliente,
       ]);
       await connection.end();
       return result.insertId;
@@ -188,7 +241,9 @@ export class ImpresionDBContext {
 
   async insertDetalleVenta(detalleVenta: DetalleVenta) {
     try {
-      const connection: mysql.Connection = await mysql.createConnection(this.config);
+      const connection: mysql.Connection = await mysql.createConnection(
+        this.config
+      );
       const querySql: string = `INSERT INTO detalleventa (id_venta, id_impresion, cantidad, precio_impresion, precio_servicio, id_foto) VALUES (?, ?, ?, ?, ?, ?)`;
       await connection.execute(querySql, [
         detalleVenta.id_venta,
@@ -196,7 +251,7 @@ export class ImpresionDBContext {
         detalleVenta.cantidad,
         detalleVenta.precio_impresion,
         detalleVenta.precio_servicio,
-        detalleVenta.id_foto
+        detalleVenta.id_foto,
       ]);
       await connection.end();
     } catch (error) {
@@ -204,6 +259,4 @@ export class ImpresionDBContext {
       throw error;
     }
   }
-
-
 }

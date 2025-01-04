@@ -1,5 +1,10 @@
-import { ImpresionDBContext,Venta,DetalleVenta, Impresion } from "../capa_acceso_datos/Impresion";
-import {PrecioDBContext, Precio} from "../capa_acceso_datos/Precio"
+import {
+  ImpresionDBContext,
+  Venta,
+  DetalleVenta,
+  Impresion,
+} from "../capa_acceso_datos/Impresion";
+import { PrecioDBContext, Precio } from "../capa_acceso_datos/Precio";
 
 export class GestorImpresion {
   private impresionDBContext: ImpresionDBContext;
@@ -71,9 +76,7 @@ export class GestorImpresion {
     }
   }
 
-  async obtenerImpresionporId(
-    id: number
-  ): Promise<
+  async obtenerImpresionporId(id: number): Promise<
     {
       id: number;
       nombre: string;
@@ -113,18 +116,37 @@ export class GestorImpresion {
     }
   }
 
-  async realizarServicio(idServicio: number, idsFotos: number[], idCliente: number, idEncargado: number, totalGeneral: number, precioServicio: number) {
+  async realizarServicio(
+    idServicio: number,
+    idsFotos: number[],
+    idCliente: number,
+    idEncargado: number,
+    totalGeneral: number,
+    precioServicio: number
+  ) {
     const now = new Date();
     const fecha_hora = now.toISOString().slice(0, 19).replace("T", " ");
-    
-    const venta = new Venta(0, 'A', fecha_hora, totalGeneral, idEncargado, idCliente);
+
+    const venta = new Venta(
+      0,
+      "A",
+      fecha_hora,
+      totalGeneral,
+      idEncargado,
+      idCliente
+    );
     const idVenta = await this.impresionDBContext.insertVenta(venta);
 
     for (const idFoto of idsFotos) {
-      const detalleVenta = new DetalleVenta(idVenta, idServicio, 1, precioServicio, 0, idFoto);
+      const detalleVenta = new DetalleVenta(
+        idVenta,
+        idServicio,
+        1,
+        precioServicio,
+        0,
+        idFoto
+      );
       await this.impresionDBContext.insertDetalleVenta(detalleVenta);
     }
   }
-
-
 }
