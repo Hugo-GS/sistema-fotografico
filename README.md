@@ -1,3 +1,5 @@
+# Sistema de Gestión Fotográfica
+
 <a href="https://idx.google.com/import?url=https%3A%2F%2Fgithub.com%2FHugo-GS%2Fsistema-fotografico">
   <picture>
     <source
@@ -12,19 +14,124 @@
       src="https://cdn.idx.dev/btn/open_purple_32.svg">
   </picture>
 </a>
-<br><br>
 
-# Sistema Fotográfico
+## Descripción
+Sistema web de gestión para estudios fotográficos que permite administrar clientes, fotografías, servicios y pedidos de impresión. Diseñado para optimizar el flujo de trabajo de estudios fotográficos profesionales.
 
-## Description
-This is a web application for managing a photography business. It allows users to manage clients, photos, services, and printing orders.
+### Características Principales
+- Gestión de clientes y sus sesiones fotográficas
+- Administración de servicios fotográficos
+- Control de pedidos de impresión
+- Gestión de catálogo de fotografías
+- Panel administrativo intuitivo
 
-## Usage
-To run the application, first install the dependencies:
+## Tecnologías
+- Node.js
+- Express.js
+- TypeScript
+- EJS (Template Engine)
+- MySQL
+- Webpack
+- Express Session
 
+## Requisitos Previos
+- Node.js (v20 o superior)
+- MySQL (v8.0 o superior)
+- npm (incluido con Node.js)
 
+## Instalación
+
+1. Clona el repositorio:
+```bash
+git clone https://github.com/Hugo-GS/sistema-fotografico.git
+cd sistema-fotografico
 ```
-npm run start
+
+2. Instala las dependencias:
+```bash
+npm ci
 ```
 
-and cmd+click (or ctrl+click) on "http://localhost:3000" to access the server.
+3. Configura las variables de entorno:
+```bash
+cp .env.example .env
+# Edita el archivo .env con tus configuraciones
+```
+
+4. Configura la base de datos:
+```bash
+# Ejecuta los scripts SQL ubicados en la carpeta database
+```
+
+## Uso
+
+### Desarrollo
+Para ejecutar en modo desarrollo con recarga automática:
+```bash
+npm run dev
+```
+
+### Producción
+Para construir y ejecutar en producción:
+```bash
+npm run build
+npm start
+```
+
+El servidor estará disponible en `http://localhost:3000`
+
+## Despliegue y Desarrollo con Google IDX
+
+> 💡 **¿Qué es IDX?**  
+> IDX es un entorno de desarrollo basado en la nube que te permite comenzar a codificar instantáneamente sin configuración local.
+
+## Estructura del Proyecto
+```
+sistema-fotografico/
+├── .idx/                          # Configuración de Google IDX
+├── backups_database/              # Respaldos de la base de datos
+│   └── backup_sistventafoto_[fecha].sql
+├── capa_acceso_datos/            # Capa de acceso a datos
+│   ├── Cliente.ts
+│   ├── configuracion_global.ts
+│   ├── Foto.ts
+│   ├── Impresion.ts
+│   ├── Persona.ts
+│   ├── Precio.ts
+│   ├── Servicio.ts
+│   └── Usuario.ts
+├── capa_logica_negocio/         # Capa de lógica de negocio
+│   ├── GestorCliente.ts
+│   ├── GestorFotos.ts
+│   ├── GestorImpresion.ts
+│   ├── GestorPersona.ts
+│   └── GestorServicio.ts
+├── capa_presentacion/           # Capa de presentación
+│   ├── public/                  # Archivos estáticos
+│   ├── rutasAPI/               # Rutas de la API
+│   │   ├── rutasAPIAdministrador.ts
+│   │   └── rutasAPIEncargado.ts
+│   ├── rutasWeb/               # Rutas web
+│   │   ├── rutasWebAdministrador.ts
+│   │   └── rutasWebEncargado.ts
+│   └── views/                  # Vistas EJS
+│       ├── vista_encargado/
+│       ├── vistas_admin/
+│       └── vistas_general/
+├── configuracionesExpress.ts   # Configuración de Express
+├── index.ts                    # Punto de entrada
+└── package.json               # Dependencias y scripts
+```
+
+## Scripts Disponibles
+- `npm run dev` - Inicia el servidor en modo desarrollo con hot-reload
+- `npm start` - Inicia el servidor en modo producción
+- `npm run build` - Construye el proyecto para producción
+
+## Licencia
+ISC - Ver el archivo [LICENSE](LICENSE) para más detalles.
+
+## Contacto
+[Tu Nombre] - [@tu_twitter](https://twitter.com/tu_twitter) - email@example.com
+
+Link del proyecto: [https://github.com/Hugo-GS/sistema-fotografico](https://github.com/Hugo-GS/sistema-fotografico)
