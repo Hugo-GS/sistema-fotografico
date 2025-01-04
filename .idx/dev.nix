@@ -1,32 +1,38 @@
 { pkgs, ... }: {
-  channel = "stable-23.11";
+  channel = "stable-24.05";
   services.mysql.enable = true; 
+  
   packages = [
     pkgs.nodejs_20
     pkgs.mysql
     pkgs.sudo
+    pkgs.nodePackages.typescript
   ];
+  
   env = {};
   idx = {
     extensions = [
-      # "vscodevim.vim"
       "esbenp.prettier-vscode"
       "cweijan.vscode-mysql-client2"
+      "dbaeumer.vscode-typescript-tslint-plugin"
     ];
+  
     workspace = {
       onCreate = {
-        install = "npm install"; 
+        npm-install = "npm ci --no-audit --prefer-offline --no-progress --timing";
       };
+      
       onStart = {
-        startDev = "npm run dev -- --port $PORT";
+        start-dev = "npm run dev -- --port $PORT";
       };
     };
+    
     previews = {
       enable = true;
       previews = {
-        default = { 
-          command = [ "npm" "run" "dev" "--" "--port" "$PORT" ]; 
-          manager = "web"; 
+        web = {
+          command = ["npm" "run" "dev" "--" "--port" "$PORT"];
+          manager = "web";
         };
       };
     };
