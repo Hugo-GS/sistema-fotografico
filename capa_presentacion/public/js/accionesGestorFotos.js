@@ -20,11 +20,9 @@ function initComponenteCargarFoto() {
       }
     } else {
         alert("No se ha cargado ninguna foto");
-      console.log("No hay archivos para subir.");
     }
   });
 
-  // Evento de arrastrar y soltar
   uploadContainer.addEventListener("dragover", (event) => {
     event.preventDefault();
     uploadContainer.classList.add("dragover");
@@ -41,13 +39,11 @@ function initComponenteCargarFoto() {
     handleFiles(files);
   });
 
-  // Evento de selección de archivos
   fileInput.addEventListener("change", (event) => {
     const files = event.target.files;
     handleFiles(files);
   });
 
-  // Manejando los archivos seleccionados
   function handleFiles(files) {
     for (const file of files) {
       selectedFiles.push(file);
@@ -374,7 +370,6 @@ function seleccionarServicio(idServicio, precio) {
       return response.json();
     })
     .then(data => {
-      console.log(data.message);
       alert("La venta se ha realizado correctamente!")
     })
     .catch(error => {

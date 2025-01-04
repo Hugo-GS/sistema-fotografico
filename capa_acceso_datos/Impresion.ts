@@ -126,27 +126,12 @@ export class ImpresionDBContext {
       return [];
     }
   }
-    //actualizar impresion este sirve
-  /*async actualizarDatosImpresion(id: number, nombre: string, descripcionDetalleProducto: string, estado: string, valor: number): Promise<void> {
-    try {
-      const connection: mysql.Connection = await mysql.createConnection(this.config);
-      const querySql: string = `
-      UPDATE impresion 
-      SET nombre = ?, descripciondetalleproducto = ?, estado = ?, valor = ?
-      WHERE id = ?`;
-      await connection.execute(querySql, [nombre, descripcionDetalleProducto, estado, valor, id]);
-      await connection.end();
-    } catch (error) {
-      console.error("Error al actualizar datos de impresión: ", error);
-      throw error;
-    }
-  }*/
 
   async actualizarDatosImpresion(id: number, nombre: string, descripcionDetalleProducto: string, estado: string, valor: number): Promise<void> {
     const connection = await mysql.createConnection(this.config);
     try {
-      const fechaHrInicio = new Date(); // Fecha y hora actuales
-      const fechaHrFin = null; // Fecha y hora de fin vacía
+      const fechaHrInicio = new Date();
+      const fechaHrFin = null;
 
       await connection.beginTransaction();
 

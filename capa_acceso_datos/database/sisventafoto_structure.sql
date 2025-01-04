@@ -1,5 +1,16 @@
-CREATE DATABASE sisventafoto;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
 DROP DATABASE sisventafoto;
+CREATE DATABASE sisventafoto;
 USE sisventafoto;
 -- db: sisventafoto
 CREATE TABLE IF NOT EXISTS persona (
@@ -25,8 +36,6 @@ CREATE TABLE IF NOT EXISTS usuario (
     FOREIGN KEY (id_persona) REFERENCES persona (id)
 ) ENGINE = InnoDB;
 
-
-
 CREATE TABLE IF NOT EXISTS cliente (
     id INT PRIMARY KEY,
     FOREIGN KEY (id) REFERENCES persona (id)
@@ -47,7 +56,6 @@ CREATE TABLE IF NOT EXISTS fotos (
     id_cliente INT,
     FOREIGN KEY (id_cliente) REFERENCES cliente (id)
 ) ENGINE = InnoDB;
-
 
 CREATE TABLE IF NOT EXISTS sucursal (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -99,7 +107,6 @@ CREATE TABLE IF NOT EXISTS precio (
     FOREIGN KEY (id_impresion) REFERENCES impresion (id)
 ) ENGINE = InnoDB;
 
-
 CREATE TABLE IF NOT EXISTS detalleventa (
     id_venta INT,
     id_impresion INT,
@@ -112,7 +119,6 @@ CREATE TABLE IF NOT EXISTS detalleventa (
     FOREIGN KEY (id_impresion) REFERENCES impresion (id),
     FOREIGN KEY (id_foto) REFERENCES fotos(id)
 ) ENGINE = InnoDB;
-
 
 CREATE TABLE IF NOT EXISTS conceptobonodescuento (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -147,3 +153,71 @@ CREATE TABLE IF NOT EXISTS servicioagregado (
     FOREIGN KEY(id_detalleventa_venta) REFERENCES detalleventa(id_venta),
     FOREIGN KEY (id_conceptoservicio) REFERENCES conceptoservicio (id)
 ) ENGINE = InnoDB;
+
+-- Inserciones de datos iniciales
+INSERT INTO tipousuario (tipo) VALUES ('A');
+INSERT INTO tipousuario (tipo) VALUES ('E');
+
+-- Insertar en la tabla `sucursal`
+INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal A', 'Calle 123, Av. A');
+INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal B', 'Calle 456, Av. B');
+INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal C', 'Calle 789, Av. C');
+INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal D', 'Calle 101, Av. D');
+INSERT INTO sucursal (nombre, direccion) VALUES ('Sucursal E', 'Calle 102, Av. F');
+
+-- Insertar en la tabla `impresion`
+INSERT INTO impresion (nombre, descripciondetalleproducto, estado) VALUES ('Impresión E', 'Hoja pequeña 9x13 cm', 'A');
+INSERT INTO impresion (nombre, descripciondetalleproducto, estado) VALUES ('Impresión D', 'Hoja pequeña 11x17 cm', 'A');
+INSERT INTO impresion (nombre, descripciondetalleproducto, estado) VALUES ('Impresión C', 'Hoja mediana 13x20 cm', 'A');
+INSERT INTO impresion (nombre, descripciondetalleproducto, estado) VALUES ('Impresión B', 'Hoja grande 18x26 cm', 'A');
+INSERT INTO impresion (nombre, descripciondetalleproducto, estado) VALUES ('Impresión A', 'Hoja grande 20x27 cm', 'A');
+
+-- Insertar en la tabla `conceptobonodescuento`
+INSERT INTO conceptobonodescuento (concepto, tipo, valor) VALUES ('Descuento Antiguedad Marqueteria', 'P', 10.00);-- P Porcentual
+
+-- Insertar en la tabla `conceptoservicio`
+INSERT INTO conceptoservicio (concepto, valor) VALUES ('Enmarcado', 10.00);
+INSERT INTO conceptoservicio (concepto, valor) VALUES ('Retoque Fotográfico', 20.00);
+INSERT INTO conceptoservicio (concepto, valor) VALUES ('Marqueteria', 50.00);
+
+-- Persona - encargado
+INSERT INTO persona (nombre, apellido_paterno, apellido_materno) VALUES ('Encargado', '', '');
+-- Persona - admin
+INSERT INTO persona (nombre, apellido_paterno, apellido_materno) VALUES ('Administrador', '', '');
+
+-- Personas - clientes
+INSERT INTO persona (nombre, apellido_paterno, apellido_materno, ci) VALUES ('Juan', 'Pérez', 'Gómez', '111');
+INSERT INTO persona (nombre, apellido_paterno, apellido_materno,ci) VALUES ('María', 'López', 'Fernández', '112');
+INSERT INTO persona (nombre, apellido_paterno, apellido_materno,ci) VALUES ('Carlos', 'García', 'Martínez', '113');
+INSERT INTO persona (nombre, apellido_paterno, apellido_materno,ci) VALUES ('Ana', 'Rodríguez', 'Sánchez', '114');
+INSERT INTO persona (nombre, apellido_paterno, apellido_materno,ci) VALUES ('Luis', 'Hernández', 'Ruiz', '115');
+
+INSERT INTO usuario (nombre_usuario, contrasena, id_persona, id_tipousuario) VALUES ('admin', 'admin', 2, 1);
+INSERT INTO usuario (nombre_usuario, contrasena, id_persona, id_tipousuario) VALUES ('encargado', 'encargado', 1, 2);
+
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Para habilitar el Event Scheduler (necesario para los eventos)
+SET GLOBAL event_scheduler = ON;
+
+-- Asegurarse que el sistema de backup funcione
+-- Crear el directorio de backups si no existe
+-- Nota: Asegúrate de tener los permisos adecuados
+SYSTEM mkdir -p /home/user/sistema-fotografico/backups_database;
+SYSTEM chmod 755 /home/user/sistema-fotografico/backups_database;
+
+-- Nota: Verifica que los siguientes usuarios existan en cliente y encargado
+INSERT INTO cliente (id) VALUES (3);
+INSERT INTO cliente (id) VALUES (4);
+INSERT INTO cliente (id) VALUES (5);
+INSERT INTO cliente (id) VALUES (6);
+INSERT INTO cliente (id) VALUES (7);
+
+INSERT INTO encargado (id, telefono) VALUES (1, '123456789');

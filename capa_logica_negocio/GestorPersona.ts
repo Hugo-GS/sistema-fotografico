@@ -18,12 +18,10 @@ export class GestorPersona {
 
   async crearPersona(nombre: string, apellidoPaterno: string, apellidoMaterno: string, ci:string): Promise<number | null> {
     try {
-      // Crear nueva persona
       const nuevaPersona = new Persona(0, nombre, apellidoPaterno, apellidoMaterno, ci);
       const idUltimaPersona = await this.PersonaDBContext.crearPersona(nuevaPersona);
 
       if (idUltimaPersona !== null) {
-        // Crear cliente asociado a la persona
         await this.crearCliente(idUltimaPersona);
       }
 
@@ -46,7 +44,6 @@ export class GestorPersona {
   async obtenerTodosLosClientes(): Promise<{ id: number, nombre: string, apellido_paterno: string, apellido_materno: string, ci:string}[]> {
     try {
       const impresionesConValor = await this.PersonaDBContext.seleccionarPersonaPorCliente();
-      console.log("Impresiones con valor:", impresionesConValor);
       return impresionesConValor;
     } catch (error) {
       console.error("Error al obtener impresiones con valor: ", error);
@@ -57,9 +54,6 @@ export class GestorPersona {
   async obtenerPersonaporId(id: number): Promise<{ id: number, nombre: string, apellido_paterno: string, apellido_materno: string , ciPersona:string }[]> {
     try {
       const personaobtenida = await this.PersonaDBContext.obtenerPersonaPorId(id);
-      //console.log("Impresiones con valor:", personaobtenida);
-      console.log("persona: obtenida");
-      console.log(personaobtenida)
       return personaobtenida;
     } catch (error) {
       //console.error("Error al obtener impresiones con valor: ", error);

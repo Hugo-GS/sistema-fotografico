@@ -50,13 +50,11 @@ async function loadPage(href) {
 
 async function loadHTML() {
   let hash = window.location.hash;
-  console.log(hash);
   if (rutasPagina[hash].contentHTML === null) {
     rutasPagina[hash].contentHTML = await loadPage(rutasPagina[hash].serverRoute);
   }
   pageContent.innerHTML = rutasPagina[hash].contentHTML;
   rutasPagina[hash].initComponent();
-  console.log(rutasPagina[hash].contentHTML)
 }
 
 const rutasPagina = {

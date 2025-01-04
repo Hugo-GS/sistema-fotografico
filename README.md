@@ -63,6 +63,20 @@ cp .env.example .env
 # Ejecuta los scripts SQL ubicados en la carpeta database
 ```
 
+## Credenciales de Prueba
+
+Para acceder al sistema, puedes utilizar las siguientes credenciales de prueba:
+
+### Administrador
+- **Usuario:** `admin`
+- **Contraseña:** `admin`
+
+### Encargado
+- **Usuario:** `encargado`
+- **Contraseña:** `encargado`
+
+> **Nota:** Estas credenciales son únicamente para propósitos de prueba y desarrollo. En un ambiente de producción, asegúrate de cambiar estas credenciales y seguir las mejores prácticas de seguridad.
+
 ## Uso
 
 ### Desarrollo

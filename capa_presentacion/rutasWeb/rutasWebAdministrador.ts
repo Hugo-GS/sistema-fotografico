@@ -37,19 +37,14 @@ async (req: Request, res: Response) => {
 
 router.get('/view_buscador_fotos', 
 async (req: Request, res: Response) => {
-  const impresion = await gestorImpresion.obtenerImpresionesConValor(); // Obtener las impresiones desde el gestor
+  const impresion = await gestorImpresion.obtenerImpresionesConValor();
       
   return  res.render(componente('gestor-busqueda-fotos'), {impresion});
 });
 
-
-
-//-- Clever ----
-//-------------------------------------------------------------------------------------------------------
 router.get('/registrar_servicio_fotografico', async (req: Request, res: Response) => {
   return res.render(componente('registroserviciofotografico'));
 });
-
 
 router.post('/registrar_servicio_fotografico', async (req: Request, res: Response) => {
   const estado = 'A';
@@ -63,13 +58,11 @@ router.post('/registrar_servicio_fotografico', async (req: Request, res: Respons
     return res.redirect('/sistemaAdmin/?estado=error');
   }
 });
-//Registrar ServicioFotografico
-// Ruta para el formulario de registrar servicio (GET)
+
 router.get('/registrar_servicio_fotografico', async (req: Request, res: Response) => {
   return res.render(componente('registroserviciofotografico'));
 });
 
-// Ruta para procesar el formulario de registrar servicio fotográfico (POST)
 router.post('/registrar_servicio_fotografico', async (req: Request, res: Response) => {
   const estado = 'A';
   const { nombre, descripcionDetalleProducto , precio } = req.body;
@@ -83,13 +76,10 @@ router.post('/registrar_servicio_fotografico', async (req: Request, res: Respons
   }
 });
 
-//-------------------------------------------------------------------------------------------------------
-// Ruta para el formulario de registrar servicio (GET)
 router.get('/registrar_servicio', async (req: Request, res: Response) => {
   return res.render(componente('registroservicio'));
 });
 
-// Ruta para procesar el formulario de registrar servicio (POST)
 router.post('/registrar_servicio', async (req: Request, res: Response) => {
   const { concepto, valor } = req.body;
 
@@ -103,14 +93,11 @@ router.post('/registrar_servicio', async (req: Request, res: Response) => {
 
 });
 
-//-------------------------------------------------------------------------------------------------------
-//Get del registrar cliente 
 router.get('/registrar_cliente', 
 async (req: Request, res: Response) => {
   return  res.render(componente('registrocliente'));
 });
 
-// Post de registrar_cliente  
 router.post('/registrar_cliente', async (req: Request, res: Response) => {
   const { nombre, apellido_paterno, apellido_materno,ci } = req.body;
   
@@ -124,21 +111,17 @@ router.post('/registrar_cliente', async (req: Request, res: Response) => {
 
 });
 
-// Ruta para mostrar la lista de impresiones
 router.get('/verImpresiones', async (req: Request, res: Response) => {
   try {
-      const impresion = await gestorImpresion.obtenerImpresionesConValor(); // Obtener las impresiones desde el gestor
-      
-      
-      res.render(componente('listaImpresiones'), { impresion });
-      
+      const impresion = await gestorImpresion.obtenerImpresionesConValor();
+
+      res.render(componente('listaImpresiones'), { impresion });      
   } catch (error) {
       console.error('Error al obtener las impresiones: ', error);
       res.status(500).send('Error al obtener las impresiones');
   }
 });
 
-// Ruta para mostrar la lista de clientes
 router.get('/verClientes', async (req: Request, res: Response) => {
   try {
       const cliente = await gestorPersona.obtenerTodosLosClientes(); 
@@ -175,19 +158,16 @@ router.post('/editar_impresion/:id', async (req: Request, res: Response) => {
     return res.redirect('/sistemaAdmin/verImpresiones?estado=error');
   }
 });
-//---------------------------------------------------------
-//Editar Cliente
+
 router.get('/editar_cliente/:id', async (req, res) => {
   const id = req.params.id;
-  //console.log(id);
   try {
     const datosEditar = await gestorPersona.obtenerPersonaporId(Number(id));
-    //console.log(datosEditar);
+
     if (!datosEditar) {
       return res.status(404).send('Cliente no encontrada');
     }
 
-    // Renderiza la página de edición con los datos de la impresión
     res.render(componente('modificarcliente'), { datosEditar: datosEditar[0] });
   } catch (error) {
     console.error('Error al obtener la impresión para editar:', error);

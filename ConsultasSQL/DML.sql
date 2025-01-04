@@ -1,5 +1,3 @@
--- Active: 1718896990540@@127.0.0.1@3306@sisventafoto
--- Seccion Hugo====
 -- Insertar en la tabla `tipousuario`
 INSERT INTO tipousuario (tipo) VALUES ('A');
 INSERT INTO tipousuario (tipo) VALUES ('E');

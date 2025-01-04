@@ -70,7 +70,6 @@ router.get('/fotosCliente/:ci', async (req: Request, res: Response) => {
   try {
     const ciCliente: string = req.params.ci;
     const fecha: string | undefined = req.query.fecha as string;
-    console.log(fecha)
     let fotosCliente: Foto[];
     if (fecha) {
       const fechaDate = new Date(fecha);
@@ -79,7 +78,6 @@ router.get('/fotosCliente/:ci', async (req: Request, res: Response) => {
       fotosCliente = await gestorFotos.obtenerFotosCliente(Number(ciCliente));
     }
 
-    // Convertir las imágenes a Base64
     const fotosClienteFormatted = fotosCliente.map(foto => ({
       ...foto,
       imagen_bin: foto.imagen_bin.toString()

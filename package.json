@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon --exec ts-node index.ts",
     "start": "ts-node index.ts",
-    "build": "webpack"
+    "build": "webpack",
+    "db:init": "ts-node capa_acceso_datos/database/DatabaseInit.ts"
   },
   "keywords": [],
   "author": "",

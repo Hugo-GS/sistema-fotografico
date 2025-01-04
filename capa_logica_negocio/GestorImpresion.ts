@@ -39,8 +39,8 @@ export class GestorImpresion {
   }
 
   async crearPrecio(idImpresion: number, valor: number): Promise<void> {
-    const fechaHrInicio = new Date(); // Fecha y hora actuales
-    const fechaHrFin = null; // Fecha y hora de fin vacía
+    const fechaHrInicio = new Date();
+    const fechaHrFin = null;
 
     const nuevoPrecio = new Precio(
       0,
@@ -64,7 +64,6 @@ export class GestorImpresion {
     try {
       const impresionesConValor =
         await this.impresionDBContext.seleccionarImpresionesConValor();
-      console.log("Impresiones con valor:", impresionesConValor);
       return impresionesConValor;
     } catch (error) {
       console.error("Error al obtener impresiones con valor: ", error);
@@ -86,7 +85,6 @@ export class GestorImpresion {
     try {
       const impresionobtenida =
         await this.impresionDBContext.obtenerImpresionPorId(id);
-      console.log("Impresiones con valor:", impresionobtenida);
       return impresionobtenida;
     } catch (error) {
       console.error("Error al obtener impresiones con valor: ", error);
