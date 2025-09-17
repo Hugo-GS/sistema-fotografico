@@ -42,6 +42,7 @@ build/
 *.swo
 .DS_Store
 .vs/
+.idx/.data/
 
 # Archivos de TypeScript
 *.tsbuildinfo
