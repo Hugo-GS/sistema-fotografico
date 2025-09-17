@@ -6,6 +6,7 @@
     <title>Administrador</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+    <script src="/js/accionesGestorFotos.js"></script>
     <script type="module" src="/js/manejadorRutasAdmin.js"></script>
   </head>
   <body>
@@ -20,94 +21,102 @@
         &nbsp;&nbsp;Foto Estudio Master
       </div>
 
-      <a class="item_nav" href="#/PanelPrincipal">
-        <i class="bx bx-home"></i>&nbsp;&nbsp; 
-        Panel principal
-      </a>
+      <div class="user-profile">
+        <i class="bx bx-user"></i>
+        <div class="user-info">
+          <span class="user-name">Admin User</span>
+          <span class="user-role">Administrador</span>
+        </div>
+      </div>
 
-      <a class="item_nav" href="#/GestorServicios">
-        <i class='bx bx-book-content'></i>&nbsp;&nbsp; 
-        Gestor de Servicios
-      </a>
+      <div class="nav-container">
+        <a class="item_nav" href="#/PanelPrincipal">
+          <i class="bx bx-home"></i>&nbsp;&nbsp;
+          Panel principal
+        </a>
 
-      <a class="item_nav" href="#/GestorClientes">
-        <i class='bx bx-book-content'></i>&nbsp;&nbsp; 
-        Gestor de Clientes
-      </a>
+        <a class="item_nav" href="#/GestorServicios">
+          <i class='bx bx-book-content'></i>&nbsp;&nbsp;
+          Gestor de Servicios
+        </a>
 
-      <a class="item_nav" href="#/GestorFotos">
-        <i class="bx bx-image-alt"></i>&nbsp;&nbsp; 
-        Gestor de Fotos
-      </a>
+        <a class="item_nav" href="#/GestorClientes">
+          <i class='bx bx-book-content'></i>&nbsp;&nbsp;
+          Gestor de Clientes
+        </a>
 
-      <a class="item_nav last_item" href="/cerrar_sesion">
-        <i class="bx bx-exit"></i>&nbsp;&nbsp; Salir del sistema
-      </a>
+        <a class="item_nav" href="#/GestorFotos">
+          <i class="bx bx-image-alt"></i>&nbsp;&nbsp;
+          Gestor de Fotos
+        </a>
+
+        <a class="item_nav last_item" href="/cerrar_sesion">
+          <i class="bx bx-exit"></i>&nbsp;&nbsp; Salir del sistema
+        </a>
+      </div>
     </div>
 
-    <div id="sub_sidebar_gestor_fotos" class="sub_sidebar no-active">
+    <div id="submenus-container">
+      <div id="sub_sidebar_gestor_fotos" class="sub_sidebar no-active">
 
-      <a class="card-acceso_rapido" href="#/GestorFotos/cargar_fotos">
-        <div class="box-i">
-          <i class='bx bx-bar-chart-square'></i>
-        </div>
-        <span>Cargar fotos</span>
-      </a>
+        <a class="card-acceso_rapido" href="#/GestorFotos/cargar_fotos">
+          <div class="box-i">
+            <i class='bx bx-bar-chart-square'></i>
+          </div>
+          <span>Cargar fotos</span>
+        </a>
 
-      <a class="card-acceso_rapido" href="#/GestorFotos/buscador_fotos">
-        <div class="box-i">
-          <i class='bx bx-bar-chart-square'></i>
-        </div>
-        <span>Gestor de archivos fotograficos</span>
-      </a>
+        <a class="card-acceso_rapido" href="#/GestorFotos/buscador_fotos">
+          <div class="box-i">
+            <i class='bx bx-bar-chart-square'></i>
+          </div>
+          <span>Gestor de archivos fotograficos</span>
+        </a>
 
+      </div>
+
+      <div id="sub_sidebar_gestor_servicio" class="sub_sidebar no-active">
+
+        <a class="card-acceso_rapido" href="#/GestorServicios/registrar_servicio_fotografico">
+          <div class="box-i">
+            <i class='bx bx-bar-chart-square'></i>
+          </div>
+          <span>Registrar Servicio Fotográfico</span>
+        </a>
+
+        <a class="card-acceso_rapido" href="#/GestorServicios/registrar_servicio">
+          <div class="box-i">
+            <i class='bx bx-bar-chart-square'></i>
+          </div>
+          <span>Registrar Servicios adicionales</span>
+        </a>
+
+        <a class="card-acceso_rapido" href="#/GestorServicios/verImpresiones">
+          <div class="box-i">
+            <i class='bx bx-bar-chart-square'></i>
+          </div>
+          <span>Ver servicios</span>
+        </a>
+
+      </div>
+
+      <div id="sub_sidebar_gestor_clientes" class="sub_sidebar no-active">
+        <a class="card-acceso_rapido" href="#/GestorClientes/verClientes">
+          <div class="box-i">
+            <i class='bx bx-bar-chart-square'></i>
+          </div>
+          <span>Ver Clientes</span>
+        </a>
+
+        <a class="card-acceso_rapido" href="#/GestorClientes/registrar_cliente">
+          <div class="box-i">
+            <i class='bx bx-bar-chart-square'></i>
+          </div>
+          <span>Registrar Cliente</span>
+        </a>
+      </div>
     </div>
-    
-    <div id="sub_sidebar_gestor_servicio" class="sub_sidebar no-active">
-
-      <a class="card-acceso_rapido" href="#/GestorServicios/registrar_servicio_fotografico">
-        <div class="box-i">
-          <i class='bx bx-bar-chart-square'></i>
-        </div>
-        <span>Registrar Servicio Fotográfico</span>
-      </a>
-
-      <a class="card-acceso_rapido" href="#/GestorServicios/registrar_servicio">
-        <div class="box-i">
-          <i class='bx bx-bar-chart-square'></i>
-        </div>
-        <span>Registrar Servicios adicionales</span>
-      </a>
-
-      <a class="card-acceso_rapido" href="#/GestorServicios/verImpresiones">
-        <div class="box-i">
-          <i class='bx bx-bar-chart-square'></i>
-        </div>
-        <span>Ver servicios</span>
-      </a>
-
-    </div>
-
-    <div id="sub_sidebar_gestor_clientes" class="sub_sidebar no-active">
-      <a class="card-acceso_rapido" href="#/GestorClientes/verClientes">
-        <div class="box-i">
-          <i class='bx bx-bar-chart-square'></i>
-        </div>
-        <span>Ver Clientes</span>
-      </a>
-
-      <a class="card-acceso_rapido" href="#/GestorClientes/registrar_cliente">
-        <div class="box-i">
-          <i class='bx bx-bar-chart-square'></i>
-        </div>
-        <span>Registrar Cliente</span>
-      </a>
-    </div>
-
     <div id="contenedorPrincipal" class="contenedor_principal">
     </div>
-    
-
-    <script src="/js/accionesGestorFotos.js"></script>
   </body>
 </html>

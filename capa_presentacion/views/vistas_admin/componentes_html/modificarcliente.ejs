@@ -1,4 +1,3 @@
-<%- include('header') %>
 <style>
   legend{
     font-size: 1.3rem;
@@ -32,49 +31,43 @@
     color: white;
   }
 </style>
-    <div id="contenedorPrincipal" class="contenedor_principal">
-        <form action="/sistemaAdmin/editar_cliente/<%= datosEditar.id %>"  method="post" class="formulario_sistema">
-            <fieldset class="formulario_sistema_fieldset">
-              <input type="hidden" maxlength="255" name="id" value="<%= datosEditar.id %>" required />
-              <legend>Modificar Cliente</legend>
-              <div>
-                <label for="nombre">
-                  Nombre: 
-                  <abbr title="required" aria-label="required">*</abbr>
-                </label>
-                <input type="text" maxlength="255" name="nombre" value="<%= datosEditar.nombre %>" required />
-              </div>
-              <div>
-                <label for="apellido_paterno">
-                  Apellido Paterno: 
-                  <abbr title="required" aria-label="required">*</abbr>
-                </label>
-                <input type="text" maxlength="255" name="apellido_paterno" value="<%= datosEditar.apellido_paterno %>"required />
-              </div>
-              <div>
-                <label for="apellido_materno">
-                  Apellido Materno:
-                  <abbr title="required" aria-label="required">*</abbr>
-                </label>
-                <input type="text" maxlength="255" name="apellido_materno" value="<%= datosEditar.apellido_materno %>"required />
-              </div>
 
-              <div>
-                <label for="ci">
-                  CI:
-                  <abbr title="required" aria-label="required">*</abbr>
-                </label>
-                <input type="text" maxlength="255" name="ci" value="<%= datosEditar.ciPersona %>"required />
-              </div>
-              
-              <div>
-                <input type="submit" value="Actualizar datos de Cliente">
-              </div>
-            </fieldset>
-          </form>
-    </div>
-    
+<form action="/sistemaAdmin/editar_cliente/<%= datosEditar.id %>"  method="post" class="formulario_sistema">
+    <fieldset class="formulario_sistema_fieldset">
+      <input type="hidden" maxlength="255" name="id" value="<%= datosEditar.id %>" required />
+      <legend>Modificar Cliente</legend>
+      <div class="input-container">
+        <input type="text" class="input" placeholder="" name="nombre" value="<%= datosEditar.nombre %>" required />
+        <label class="input-label" for="nombre">
+          Nombre:
+          <abbr title="required" aria-label="required">*</abbr>
+        </label>
+      </div>
+      <div class="input-container">
+        <input type="text" class="input" placeholder="" name="apellido_paterno" value="<%= datosEditar.apellido_paterno %>"required />
+        <label class="input-label" for="apellido_paterno">
+          Apellido Paterno:
+          <abbr title="required" aria-label="required">*</abbr>
+        </label>
+      </div>
+      <div class="input-container">
+        <input type="text" class="input" placeholder="" name="apellido_materno" value="<%= datosEditar.apellido_materno %>"required />
+        <label class="input-label" for="apellido_materno">
+          Apellido Materno:
+          <abbr title="required" aria-label="required">*</abbr>
+        </label>
+      </div>
 
-    <script src="/js/accionesGestorFotos.js"></script>
-  </body>
-</html>
+      <div class="input-container">
+        <input type="text" class="input" placeholder="" name="ci" value="<%= datosEditar.ciPersona %>"required />
+        <label class="input-label" for="ci">
+          CI:
+          <abbr title="required" aria-label="required">*</abbr>
+        </label>
+      </div>
+      
+      <div>
+        <input type="submit" value="Actualizar datos de Cliente">
+      </div>
+    </fieldset>
+  </form>

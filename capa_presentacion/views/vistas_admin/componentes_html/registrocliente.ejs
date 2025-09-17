@@ -35,33 +35,33 @@
 <form action="/sistemaAdmin/registrar_cliente" method="post" class="formulario_sistema">
     <fieldset class="formulario_sistema_fieldset">
       <legend>Registrar Cliente</legend>
-      <div>
-        <label for="nombre">
+      <div class="input-container">
+        <input type="text" class="input" placeholder="" maxlength="50" name="nombre" required />
+        <label for="nombre" class="input-label">
           Nombre: 
           <abbr title="required" aria-label="required">*</abbr>
         </label>
-        <input type="text" maxlength="50" name="nombre" required />
       </div>
-      <div>
-        <label for="apellido_paterno">
+      <div class="input-container">
+        <input type="text" class="input" placeholder="" maxlength="50" name="apellido_paterno" required />
+        <label for="apellido_paterno" class="input-label">
           Apellido Paterno: 
           <abbr title="required" aria-label="required">*</abbr>
         </label>
-        <input type="text" maxlength="50" name="apellido_paterno" required />
       </div>
-      <div>
-        <label for="apellido_materno">
+      <div class="input-container">
+        <input type="text" class="input" placeholder="" maxlength="50" name="apellido_materno" required />
+        <label for="apellido_materno" class="input-label">
           Apellido Materno:
           <abbr title="required" aria-label="required">*</abbr>
         </label>
-        <input type="text" maxlength="50" name="apellido_materno" required />
       </div>
-      <div>
-        <label for="ci">
+      <div class="input-container">
+        <input type="text" class="input" placeholder="" maxlength="12" name="ci" required />
+        <label for="ci" class="input-label">
           CI:
           <abbr title="required" aria-label="required">*</abbr>
         </label>
-        <input type="text" maxlength="12" name="ci" required />
       </div>
       <div>
         <input type="submit" value="Registrar Cliente">

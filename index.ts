@@ -53,4 +53,8 @@ app.use("/encargado", rutasApiEncargado);
 app.use("/sistemaAdmin", verificarAdmin,rutasWebAdministrador);
 app.use("/sistemaEncar", verificarSesion,rutasWebEncargado);
 
+app.get('*', (_req: Request, res: Response) => {
+    res.redirect('/');
+  });
+
 app.listen(port, () => console.log(`Server running on http://localhost:${port}`));

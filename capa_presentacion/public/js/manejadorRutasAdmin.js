@@ -38,6 +38,29 @@ function desactivarSubSidebars() {
   subsidebarGestorServicio.classList.add("no-active");
   subsidebarGestorCliente.classList.remove("active");
   subsidebarGestorCliente.classList.add("no-active");
+  // Remove active from all cards
+  document.querySelectorAll('.card-acceso_rapido.active').forEach(card => card.classList.remove('active'));
+}
+
+function setActiveTab(subsidebar, index) {
+  const cards = subsidebar.querySelectorAll('.card-acceso_rapido');
+  cards.forEach(card => card.classList.remove('active'));
+  if (cards[index]) {
+    cards[index].classList.add('active');
+    updateSlider(subsidebar);
+  }
+}
+
+function updateSlider(subsidebar) {
+  const active = subsidebar.querySelector('.card-acceso_rapido.active');
+  if (active) {
+    const rect = active.getBoundingClientRect();
+    const containerRect = subsidebar.getBoundingClientRect();
+    const left = rect.left - containerRect.left;
+    const width = rect.width;
+    subsidebar.style.setProperty('--slider-left', left + 'px');
+    subsidebar.style.setProperty('--slider-width', width + 'px');
+  }
 }
 
 async function loadPage(href) {
@@ -56,6 +79,11 @@ async function loadPage(href) {
 
 async function loadHTML() {
   let hash = window.location.hash;
+  if (!rutasPagina[hash]) {
+    console.error(`Ruta no encontrada: ${hash}`);
+    pageContent.innerHTML = `<p>Ruta no encontrada: ${hash}</p>`;
+    return;
+  }
   if (rutasPagina[hash].contentHTML === null) {
     rutasPagina[hash].contentHTML = await loadPage(
       rutasPagina[hash].serverRoute
@@ -84,12 +112,12 @@ const rutasPagina = {
   "#/GestorFotos/buscador_fotos": {
     contentHTML: null,
     serverRoute: "/view_buscador_fotos",
-    initComponent: () => initComponenteBuscadorFotos(),
+    initComponent: () => { setActiveTab(subsidebarGestorfotos, 1); initComponenteBuscadorFotos(); },
   },
   "#/GestorFotos/cargar_fotos": {
     contentHTML: null,
     serverRoute: "/view_cargar_fotos",
-    initComponent: () => initComponenteCargarFoto(),
+    initComponent: () => { setActiveTab(subsidebarGestorfotos, 0); initComponenteCargarFoto(); },
   },
   "#/GestorServicios": {
     contentHTML: null,
@@ -102,17 +130,17 @@ const rutasPagina = {
   "#/GestorServicios/registrar_servicio_fotografico": {
     contentHTML: null,
     serverRoute: "/registrar_servicio_fotografico",
-    initComponent: () => {},
+    initComponent: () => { setActiveTab(subsidebarGestorServicio, 0); },
   },
   "#/GestorServicios/registrar_servicio": {
     contentHTML: null,
     serverRoute: "/registrar_servicio",
-    initComponent: () => {},
+    initComponent: () => { setActiveTab(subsidebarGestorServicio, 1); },
   },
   "#/GestorServicios/verImpresiones": {
     contentHTML: null,
     serverRoute: "/verImpresiones",
-    initComponent: () => {},
+    initComponent: () => { setActiveTab(subsidebarGestorServicio, 2); },
   },
   "#/GestorClientes": {
     contentHTML: null,
@@ -125,11 +153,26 @@ const rutasPagina = {
   "#/GestorClientes/verClientes": {
     contentHTML: null,
     serverRoute: "/verClientes",
-    initComponent: () => {},
+    initComponent: () => { setActiveTab(subsidebarGestorCliente, 0); },
   },
   "#/GestorClientes/registrar_cliente": {
     contentHTML: null,
     serverRoute: "/registrar_cliente",
-    initComponent: () => {},
+    initComponent: () => { setActiveTab(subsidebarGestorCliente, 1); },
   },
 };
+
+// Función para cargar cliente para edición (disponible globalmente)
+window.loadEditarCliente = async function(clienteId) {
+  try {
+    const response = await fetch(`${prefix}editar_cliente/${clienteId}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const textHTML = await response.text();
+    pageContent.innerHTML = textHTML;
+  } catch (error) {
+    console.error(`Error al cargar el cliente para edición: ${error}`);
+    pageContent.innerHTML = `<p>Error al cargar el cliente: ${error.message}</p>`;
+  }
+}
